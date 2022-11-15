@@ -1,7 +1,7 @@
 export interface Model<T, M> {
   create(obj: M): Promise<T>
 
-  // getOne(obj: T ): Promise<T| null>
+  getOne(obj: M): Promise<T | null>
   
   // getAll(): Promise<T[]>
 
