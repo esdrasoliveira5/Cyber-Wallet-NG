@@ -1,9 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Model } from '../Interfaces/ModelInterface';
 
-abstract class PrismaModel<T> implements Model<T> {
+abstract class PrismaModel<T, M> implements Model<T, M> {
   constructor(public model: PrismaClient) {}
-
-  abstract create(obj: T): Promise<T>;
+  abstract create(obj: M): Promise<T>;
 }
 export default PrismaModel;

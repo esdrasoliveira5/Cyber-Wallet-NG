@@ -1,5 +1,5 @@
-export interface Model<T> {
-  create(obj: T): Promise<T>
+export interface Model<T, M> {
+  create(obj: M): Promise<T>
 
   // getOne(obj: T ): Promise<T| null>
   
