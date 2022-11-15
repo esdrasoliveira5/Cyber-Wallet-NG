@@ -8,9 +8,11 @@ class App {
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.app.get('/', async (_req: Request, resp: Response) => resp.status(200).json({
-      message: 'API OLINE!!',
-    }));
+    this.app.get('/', async (_req: Request, resp: Response) => {
+      resp.status(200).json({
+        message: 'API OLINE!!',
+      });
+    });
   }
 
   public startServer(PORT: string | number = 3001): void {
