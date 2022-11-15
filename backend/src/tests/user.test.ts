@@ -62,4 +62,29 @@ describe('1 - Test endpoint POST /user', () => {
     });
     });
   });
+  describe('1.2 - if fail', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(userModel, 'create')
+      .rejects({ error: 'Internal Server Error'});
+      sinon
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 500 and the error message "Internal Server Error"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .post('/user')
+         .set('X-API-Key', 'foobar')
+         .send({
+          "username": "esdreasx",
+          "password": "roberto_password",
+      });
+      expect(chaiHttpResponse).to.have.status(500);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+    });
+  });
 });

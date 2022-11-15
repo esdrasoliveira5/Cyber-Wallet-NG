@@ -11,11 +11,9 @@ class App {
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.app.use(this.handleError.genericError);
-
     this.app.get('/', async (_req: Request, resp: Response) => {
       resp.status(200).json({
-        message: 'API OLINE!!',
+        message: 'API ONLINE!!',
       });
     });
   }
@@ -29,6 +27,7 @@ class App {
 
   public addRouter(router: Router) {
     this.app.use(router);
+    this.app.use(this.handleError.genericError);
   }
 
   public getApp() {

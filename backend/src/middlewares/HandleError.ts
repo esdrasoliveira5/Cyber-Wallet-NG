@@ -9,7 +9,8 @@ class HandleError {
     _next: NextFunction,
   ) => {
     console.error(err);
-    return res.status(500).json({ error: `Erro: ${err.message}` });
+    
+    return res.status(500).json({ error: 'Internal Server Error' });
   };
 }
 
