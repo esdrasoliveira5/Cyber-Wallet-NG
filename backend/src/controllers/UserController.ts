@@ -25,7 +25,7 @@ class UserController extends Controller<User, UserPayload > {
     
     const response = await this.service.create(body);
 
-    return res.status(200).json(response);
+    return res.status(201).json(response);
   };
 }
 
