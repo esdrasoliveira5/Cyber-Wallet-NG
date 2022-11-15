@@ -36,6 +36,9 @@ describe('1 - Test endpoint POST /user', () => {
 
     before(() => {
       sinon
+      .stub(userModel, 'getOne')
+      .resolves(null);
+      sinon
       .stub(userModel, 'create')
       .resolves(payload);
     });
@@ -66,11 +69,13 @@ describe('1 - Test endpoint POST /user', () => {
     let chaiHttpResponse: Response;
     before(() => {
       sinon
-      .stub(userModel, 'create')
-      .rejects({ error: 'Internal Server Error'});
-      sinon
+      .stub(userModel, 'getOne')
+      .onFirstCall()
+      .rejects({ error: 'Internal Server Error'})
+      .onSecondCall()
+      .resolves(payload);
     });
-    after(()=>{
+    afterEach(()=>{
       sinon.restore();
     });
 
@@ -85,6 +90,19 @@ describe('1 - Test endpoint POST /user', () => {
       });
       expect(chaiHttpResponse).to.have.status(500);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+    });
+
+    it('b) return status 400 and the error message "Username already registered!"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .post('/user')
+         .set('X-API-Key', 'foobar')
+         .send({
+          "username": "esdreasx",
+          "password": "roberto_password",
+      });
+      expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Username already registered!"});
     });
   });
 });
