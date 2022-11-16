@@ -3,10 +3,10 @@ import { UserPayload } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class UserModel extends PrismaModel<User, UserPayload> {
-  getOne = async (data: UserPayload): Promise<User | null> => {
+  getOne = async (data: string): Promise<User | null> => {
     const response = this.model.user.findUnique({
       where: {
-        username: data.username, 
+        username: data, 
       }, 
     });
     return response;

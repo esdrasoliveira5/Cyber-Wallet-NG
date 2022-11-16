@@ -42,6 +42,20 @@ class UserController extends Controller<User, UserPayload > {
 
     return res.status(201).json(response);
   };
+
+  login = async (
+    req: Request<User>,
+    res: Response,
+  ): Promise<typeof res> => {
+    const { body } = req;
+    
+    const response = await this.service.login(body);
+    if ('error' in response) {
+      return res.status(StatusCodes.BAD_REQUEST).json(response);
+    }
+
+    return res.status(201).json(response);
+  };
 }
 
 export default UserController;
