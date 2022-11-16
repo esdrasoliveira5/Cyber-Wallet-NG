@@ -45,7 +45,7 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
 
-    return res.status(201).json(response);
+    return res.status(StatusCodes.CREATED).json(response);
   };
 
   login = async (
@@ -59,7 +59,7 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
 
-    return res.status(201).json(response);
+    return res.status(StatusCodes.OK).json(response);
   };
 }
 
