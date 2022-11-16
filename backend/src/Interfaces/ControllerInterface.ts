@@ -5,6 +5,6 @@ export interface ControllerI {
   create(req: Request, res: Response):
   Promise<typeof res>;
   
-  login?(req: Request, res: Response):
+  getOne(req: Request, res: Response):
   Promise<typeof res>;
 }

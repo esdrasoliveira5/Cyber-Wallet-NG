@@ -9,6 +9,9 @@ abstract class Controller<T, M> implements ControllerI {
 
   abstract create(req: Request, res: Response):
   Promise<typeof res>;
+
+  abstract getOne(req: Request, res: Response):
+  Promise<typeof res>;
 }
 
 export default Controller;

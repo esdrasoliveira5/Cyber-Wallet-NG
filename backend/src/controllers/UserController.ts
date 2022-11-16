@@ -35,7 +35,7 @@ class UserController extends Controller<User, UserPayload >
   get route() { return this._route; }
 
   create = async (
-    req: Request<User>,
+    req: Request<UserPayload>,
     res: Response,
   ): Promise<typeof res> => {
     const { body } = req;
@@ -46,6 +46,20 @@ class UserController extends Controller<User, UserPayload >
     }
 
     return res.status(StatusCodes.CREATED).json(response);
+  };
+
+  getOne = async (
+    req: Request<UserPayload>,
+    res: Response,
+  ): Promise<typeof res> => {
+    const { username } = req.params;
+    
+    const response = await this.service.getOne(username);
+    if ('error' in response) {
+      return res.status(StatusCodes.NOT_FOUND).json(response);
+    }
+
+    return res.status(StatusCodes.OK).json(response);
   };
 
   login = async (

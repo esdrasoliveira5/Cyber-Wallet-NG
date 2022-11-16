@@ -10,7 +10,7 @@ class UserRouter {
   ) {
     this.router.post(route, controller.create);
     this.router.post('/login', controller.login);
-    // this.router.get(route, controller.read);
+    this.router.get(`${route}/:username`, controller.getOne);
     // this.router.get(`${route}/:id`, controller.readOne);
     // this.router.put(`${route}/:id`, controller.update);
     // this.router.delete(`${route}/:id`, controller.delete);
