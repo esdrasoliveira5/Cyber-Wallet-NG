@@ -53,8 +53,14 @@ class UserController extends Controller<User, UserPayload >
     res: Response,
   ): Promise<typeof res> => {
     const { username } = req.params;
+    const userToken = await this.handleAuthorization(req);
+    if ('error' in userToken) {
+      return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
+    }
+    const user = username !== 'self' ? username : userToken.username;
     
-    const response = await this.service.getOne(username);
+    const response = await this.service.getOne(user);
+
     if ('error' in response) {
       return res.status(StatusCodes.NOT_FOUND).json(response);
     }

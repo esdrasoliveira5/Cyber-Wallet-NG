@@ -1,5 +1,5 @@
 import bcrypt = require('bcrypt');
-import { sign, SignOptions, verify } from 'jsonwebtoken';
+import { sign, SignOptions } from 'jsonwebtoken';
 import * as path from 'path';
 import fs = require('fs');
 import { ResponseError, TokenType, UserPayload } from '../Types/Index';
@@ -54,21 +54,6 @@ abstract class Service<T, M> implements ServiceI<T, M> {
 
     const token: string = sign(data, secret, jwtConfig);
     return token;
-  };
-
-  protected validateToken = async (token: string | undefined):
-  Promise<ResponseError | TokenType> => {
-    const secret = fs.readFileSync(path.resolve('jwt.evaluation.key'), 'utf8');
-
-    if (token === undefined) {
-      return { error: MessageErrors.UNAUTHORIZED };
-    }
-    try {
-      const decoded = verify(token, secret) as TokenType;
-      return decoded;
-    } catch (err) {
-      return { error: MessageErrors.INVALID_TOKEN };
-    }
   };
 }
 
