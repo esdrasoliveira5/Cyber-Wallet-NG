@@ -10,6 +10,7 @@ class UserRouter {
   ) {
     this.router.post(route, controller.create);
     this.router.post('/login', controller.login);
+    this.router.get(`${route}/account`, controller.getAccount);
     this.router.get(`${route}/:username`, controller.getOne);
     // this.router.get(`${route}/:id`, controller.readOne);
     // this.router.put(`${route}/:id`, controller.update);

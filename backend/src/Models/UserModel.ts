@@ -25,6 +25,26 @@ class UserModel extends PrismaModel<User, UserPayload> {
     return response;
   };
 
+  public getAccount = async (data: string):
+  Promise<Omit<User, 'password' | 'accountId'> | null> => {
+    const response = this.model.user.findUnique({
+      where: {
+        id: data, 
+      }, 
+      select: {
+        id: true,
+        username: true,
+        account: {
+          select: {
+            id: true,
+            balance: true,
+          },
+        },
+      },
+    });
+    return response;
+  };
+
   private accountCreate = async (): 
   Promise<Account> => {
     const response = this.model.account.create(

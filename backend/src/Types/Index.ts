@@ -1,5 +1,3 @@
-import { User } from '@prisma/client';
-
 export type UserPayload = {
   username: string,
   password: string
@@ -15,6 +13,10 @@ export type TokenType = {
 };
 
 export type UserToken = {
-  user: User,
+  user: {
+    id: string,
+    username: string,
+    accountId: string,
+  },
   token: string,
 };

@@ -1,4 +1,5 @@
 import { User } from '@prisma/client';
+import UserModel from '../Models/UserModel';
 import { ResponseError, UserPayload, UserToken } from '../Types/Index';
 
 import Service from './Index';
@@ -15,6 +16,15 @@ export enum MessageErrors {
 }
 
 class UserService extends Service<User, UserPayload> {
+  private userModel: UserModel;
+
+  constructor(
+    model: UserModel,
+  ) {
+    super(model);
+    this.userModel = model;    
+  }
+
   create = async (data: UserPayload): Promise<User | ResponseError> => {
     const validation = this.dataValidation(data);
     if (validation) return validation;
@@ -45,11 +55,24 @@ class UserService extends Service<User, UserPayload> {
     if (passwordValidation) return passwordValidation;
 
     const token = await this.generateToken(
-      { id: user.id,
-        username: user.username,
-      },
+      { id: user.id, username: user.username },
     );
-    return { user, token };
+    return { 
+      user: {
+        id: user.id,
+        username: user.username,
+        accountId: user.accountId,
+      },
+      token,
+    };
+  };
+
+  getAccount = async (data: string): 
+  Promise<Omit<User, 'password' | 'accountId'> | ResponseError> => {
+    const userAccount = await this.userModel.getAccount(data);
+    if (!userAccount) return { error: MessageErrors.NOT_FOUND };
+
+    return userAccount;
   };
 }
 

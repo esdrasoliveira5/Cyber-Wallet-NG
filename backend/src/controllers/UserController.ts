@@ -21,7 +21,7 @@ class UserController extends Controller<User, UserPayload >
   implements ControllerI {
   private _route: string;
 
-  public userService: UserService;
+  private userService: UserService;
 
   constructor(
     service: UserService,
@@ -45,7 +45,11 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
 
-    return res.status(StatusCodes.CREATED).json(response);
+    return res.status(StatusCodes.OK).json({
+      id: response.id,
+      username: response.username,
+      accountId: response.accountId,
+    });
   };
 
   getOne = async (
@@ -57,15 +61,16 @@ class UserController extends Controller<User, UserPayload >
     if ('error' in userToken) {
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
     }
-    const user = username !== 'self' ? username : userToken.username;
-    
-    const response = await this.service.getOne(user);
+    const response = await this.service.getOne(username);
 
     if ('error' in response) {
       return res.status(StatusCodes.NOT_FOUND).json(response);
     }
-
-    return res.status(StatusCodes.OK).json(response);
+    return res.status(StatusCodes.OK).json({
+      id: response.id,
+      username: response.username,
+      accountId: response.accountId,
+    });
   };
 
   login = async (
@@ -77,6 +82,24 @@ class UserController extends Controller<User, UserPayload >
     const response = await this.userService.login(body);
     if ('error' in response) {
       return res.status(StatusCodes.BAD_REQUEST).json(response);
+    }
+
+    return res.status(StatusCodes.OK).json(response);
+  };
+
+  getAccount = async (
+    req: Request<UserPayload>,
+    res: Response,
+  ): Promise<typeof res> => {
+    const userToken = await this.handleAuthorization(req);
+    if ('error' in userToken) {
+      return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
+    }
+    
+    const response = await this.userService.getAccount(userToken.id);
+
+    if ('error' in response) {
+      return res.status(StatusCodes.NOT_FOUND).json(response);
     }
 
     return res.status(StatusCodes.OK).json(response);

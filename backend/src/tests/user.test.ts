@@ -265,22 +265,6 @@ describe('3 - Test endpoint GET /user/:username', () => {
         "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
       });
     });
-
-    it('b) return status 200 and the self user', async () => {
-      chaiHttpResponse = await chai
-         .request(server.app)
-         .get('/user/self')
-         .set('X-API-Key', 'foobar')
-         .set('authorization', LOGIN_PAYLOAD.token)
-
-      expect(chaiHttpResponse).to.have.status(200);
-      expect(chaiHttpResponse.body).to.deep.equal({
-        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
-        "username": "esdrasx1",
-        "password": "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
-        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
-      });
-    });
   });
 
   describe('3.2 - if fail', () => {
