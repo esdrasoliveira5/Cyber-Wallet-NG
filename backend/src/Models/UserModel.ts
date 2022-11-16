@@ -3,15 +3,6 @@ import { UserPayload } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class UserModel extends PrismaModel<User, UserPayload> {
-  getOne = async (data: string): Promise<User | null> => {
-    const response = this.model.user.findUnique({
-      where: {
-        username: data, 
-      }, 
-    });
-    return response;
-  };
-
   create = async (data: UserPayload): Promise<User> => {
     const { id } = await this.accountCreate();
     const response = this.model.user.create(
@@ -22,6 +13,15 @@ class UserModel extends PrismaModel<User, UserPayload> {
         },
       },
     );
+    return response;
+  };
+
+  getOne = async (data: string): Promise<User | null> => {
+    const response = this.model.user.findUnique({
+      where: {
+        username: data, 
+      }, 
+    });
     return response;
   };
 
