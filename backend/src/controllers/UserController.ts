@@ -45,7 +45,7 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
 
-    return res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.CREATED).json({
       id: response.id,
       username: response.username,
       accountId: response.accountId,
