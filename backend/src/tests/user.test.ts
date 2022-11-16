@@ -146,7 +146,7 @@ describe('1 - Test endpoint POST /user', () => {
 });
 
 describe('2 - Test endpoint POST /login', () => {
-  describe('1.1 - if success', () => {
+  describe('2.1 - if success', () => {
     let chaiHttpResponse: Response;
     before(() => {
       sinon
@@ -177,7 +177,7 @@ describe('2 - Test endpoint POST /login', () => {
     });
   });
 
-  describe('1.2 - if fail', () => {
+  describe('2.2 - if fail', () => {
     let chaiHttpResponse: Response;
     before(() => {
       sinon
@@ -231,6 +231,102 @@ describe('2 - Test endpoint POST /login', () => {
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
+    });
+  });
+});
+
+describe('3 - Test endpoint GET /user/:username', () => {
+  describe('3.1 - if success', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(userModel, 'getOne')
+      .onFirstCall()
+      .resolves(USER_PAYLOAD)
+      .onSecondCall()
+      .resolves(USER_PAYLOAD)
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 200 and the user', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/user/esdrasx1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', LOGIN_PAYLOAD.token)
+
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.deep.equal({
+        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
+        "username": "esdrasx1",
+        "password": "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
+        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+      });
+    });
+
+    it('b) return status 200 and the self user', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/user/self')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', LOGIN_PAYLOAD.token)
+
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.deep.equal({
+        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
+        "username": "esdrasx1",
+        "password": "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
+        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+      });
+    });
+  });
+
+  describe('3.2 - if fail', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(userModel, 'getOne')
+      .onFirstCall()
+      .rejects({ error: 'Internal Server Error'})
+      .onSecondCall()
+      .resolves(null);
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 500 and the error message "Internal Server Error"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/user/esdrasx1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', LOGIN_PAYLOAD.token);
+
+      expect(chaiHttpResponse).to.have.status(500);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+    });
+
+    it('b) return status 401 and the error message "Unauthorized" if Authorization token is invalid', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/user/esdrasx1')
+         .set('X-API-Key', 'foobar');
+
+      expect(chaiHttpResponse).to.have.status(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
+    });
+
+    it('c) return status 404 and the error message "Not Found"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/user/esdrasx1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', LOGIN_PAYLOAD.token);
+
+      expect(chaiHttpResponse).to.have.status(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Not Found"});
     });
   });
 });
