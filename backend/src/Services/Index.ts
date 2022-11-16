@@ -4,6 +4,7 @@ import * as path from 'path';
 import fs = require('fs');
 import { ResponseError, TokenType, UserPayload } from '../Types/Index';
 import { Model } from '../Interfaces/ModelInterface';
+import { ServiceI } from '../Interfaces/ServiceInterface';
 
 export enum MessageErrors {
   INTERNAL = 'Internal Server Error',
@@ -16,7 +17,7 @@ export enum MessageErrors {
   UNAUTHORIZED = 'Unauthorized',
 }
 
-abstract class Service<T, M> {
+abstract class Service<T, M> implements ServiceI<T, M> {
   constructor(public model: Model<T, M>) {}
 
   abstract create(data: M): Promise<T | ResponseError>;

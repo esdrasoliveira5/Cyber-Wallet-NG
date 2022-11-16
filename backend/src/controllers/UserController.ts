@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import UserService from '../Services/UserService';
 import { UserPayload } from '../Types/Index';
 import Controller from './Index';
+import { ControllerI } from '../Interfaces/ControllerInterface';
 
 export enum StatusCodes {
   OK = 200,
@@ -16,8 +17,11 @@ export enum StatusCodes {
   INTERNAL = 500,
 }
 
-class UserController extends Controller<User, UserPayload > {
+class UserController extends Controller<User, UserPayload >
+  implements ControllerI {
   private _route: string;
+
+  public userService: UserService;
 
   constructor(
     service: UserService,
@@ -25,6 +29,7 @@ class UserController extends Controller<User, UserPayload > {
   ) {
     super(service);
     this._route = route;
+    this.userService = service;    
   }
 
   get route() { return this._route; }
@@ -49,7 +54,7 @@ class UserController extends Controller<User, UserPayload > {
   ): Promise<typeof res> => {
     const { body } = req;
     
-    const response = await this.service.login(body);
+    const response = await this.userService.login(body);
     if ('error' in response) {
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
