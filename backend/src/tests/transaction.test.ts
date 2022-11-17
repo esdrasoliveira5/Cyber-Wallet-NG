@@ -34,13 +34,15 @@ const TRANSACTION_PAYLOAD = {
     creditedAccountId: 2
 }
 
-const USER_PAYLOAD = {
-  id: 1,
-  username: "esdrasx1",
-  password: "password",
-  accountId: 1
+const ACCOUNT_PAYLOAD = {
+  id: 2,
+  balance: 100
 };
 
+const DEBIT_ACCOUNT_PAYLOAD = {
+  id: 1,
+  balance: 100
+}
 
 describe('1 - Test endpoint POST /transaction', () => {
   describe('1.1 - if success', () => {
@@ -48,7 +50,10 @@ describe('1 - Test endpoint POST /transaction', () => {
     before(() => {
       sinon
       .stub(transactionModel, 'getAccount')
-      .resolves(USER_PAYLOAD);
+      .onFirstCall()
+      .resolves(ACCOUNT_PAYLOAD)
+      .onSecondCall()
+      .resolves(DEBIT_ACCOUNT_PAYLOAD);
       sinon
       .stub(transactionModel, 'create')
       .resolves(TRANSACTION_PAYLOAD);
@@ -87,10 +92,12 @@ describe('1 - Test endpoint POST /transaction', () => {
       .onFirstCall()
       .resolves(null)
       .onSecondCall()
-      .resolves(USER_PAYLOAD);
-      sinon
-      .stub(transactionModel, 'create')
-      .rejects({ error: 'Internal Server Error'})
+      .resolves(ACCOUNT_PAYLOAD)
+      .onThirdCall()
+      .resolves({
+        id: 1,
+        balance: 0
+      });
     });
     after(()=>{
       sinon.restore();
@@ -151,18 +158,18 @@ describe('1 - Test endpoint POST /transaction', () => {
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Bad Request"});
     });
-    it('e) return status 500 and the error message "Internal Server Error"', async () => {
+    it('e) return status 400 and the error message "Insufficient balance"', async () => {
       chaiHttpResponse = await chai
          .request(server.app)
          .post('/transaction')
          .set('X-API-Key', 'foobar')
          .set('authorization', TOKEN)
          .send({
-          "value": 100,
+          "value": 50,
           "creditedAccountId": 50
       });
-      expect(chaiHttpResponse).to.have.status(500);
-      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+      expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Insufficient balance"});
     });
   });
 });
