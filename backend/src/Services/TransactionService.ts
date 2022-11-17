@@ -27,7 +27,9 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     const userbalance = await this.transactionModel.getAccount(
       data.debitedAccountId,
     ) as Account;
-
+    if (data.creditedAccountId === data.debitedAccountId) {
+      return { error: MessageErrors.BAD_REQUEST };
+    }
     if ((userbalance.balance - data.value) < 0) {
       return { error: 'Insufficient balance' };
     }
