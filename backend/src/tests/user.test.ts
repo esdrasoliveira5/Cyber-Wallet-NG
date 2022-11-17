@@ -25,22 +25,22 @@ const { expect } = chai;
 
 const USER_PAYLOAD = {
   id: 1,
-  username: "esdrasx1",
+  username: "esdrasteste1",
   accountId: 1
 };
 
 const LOGIN_PAYLOAD = {
   user: {
       id: 1,
-      username: "esdrea12s",
+      username: "esdrasteste1",
       accountId: 1
   },
-  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNjIwNTRlLTY3ZDUtNGY2Ni04YzMzLTMwNzFiOTIzYmI2NiIsInVzZXJuYW1lIjoiZXNkcmVhMTJzIiwiaWF0IjoxNjY4NjI3MjQxLCJleHAiOjE2Njg3MTM2NDF9.OJVbBitrrLMzw98jp6sXE9Ehht5rqvHz6KsRPxdAyjo"
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlc2RyYXN0ZXN0ZTEiLCJpYXQiOjE2Njg3MTM1NzEsImV4cCI6MTcxMTkxMzU3MX0.w9A5E_iFLPMxcW5KoCEQsrW0XdY4OI1i3PLIZ3mAhSY"
 };
 
 const USER_ACCOUNT_PAYLOAD = {
   id: 1,
-  username: "esdrea12s",
+  username: "esdrasteste1",
   account: {
       id: 1,
       balance: 100
@@ -68,14 +68,14 @@ describe('1 - Test endpoint POST /user', () => {
          .post('/user')
          .set('X-API-Key', 'foobar')
          .send({
-          "username": "teste",
+          "username": "esdrasteste1",
           "password": "AaaaBbbb1",
       });
 
       expect(chaiHttpResponse).to.have.status(201);
       expect(chaiHttpResponse.body).to.deep.equal({
         id: 1,
-        username: "esdrasx1",
+        username: "esdrasteste1",
         accountId: 1
       });
     });
@@ -158,7 +158,7 @@ describe('2 - Test endpoint POST /login', () => {
       .stub(userModel, 'getAccount')
       .resolves({  
         id: 1,
-        username: "esdrasx1",
+        username: "esdrasteste1",
         password: "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
         accountId: 1
       });
@@ -173,14 +173,14 @@ describe('2 - Test endpoint POST /login', () => {
          .post('/login')
          .set('X-API-Key', 'foobar')
          .send({
-          "username": "esdrea12s",
+          "username": "esdrasteste1",
           "password": "AaaaBbbb1",
       });
 
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body.user).to.deep.equal({
         "id": 1,
-        "username": "esdrasx1",
+        "username": "esdrasteste1",
         "accountId": 1
       });
     });
@@ -206,7 +206,7 @@ describe('2 - Test endpoint POST /login', () => {
          .post('/login')
          .set('X-API-Key', 'foobar')
          .send({
-          "username": "esdrasd",
+          "username": "esdrasteste1",
           "password": "AaaaBbbb1",
       });
 
@@ -271,14 +271,14 @@ describe('3 - Test endpoint GET /user/:username', () => {
     it('a) return status 200 and the user', async () => {
       chaiHttpResponse = await chai
          .request(server.app)
-         .get('/user/esdrasx1')
+         .get('/user/esdrasteste1')
          .set('X-API-Key', 'foobar')
          .set('authorization', LOGIN_PAYLOAD.token)
 
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body).to.deep.equal({
         id: 1,
-        username: "esdrasx1",
+        username: "esdrasteste1",
         accountId: 1
       });
     });
@@ -354,7 +354,7 @@ describe('4 - Test endpoint GET /user/account', () => {
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body).to.deep.equal({
         id: 1,
-        username: "esdrea12s",
+        username: "esdrasteste1",
         account: {
             id: 1,
             balance: 100

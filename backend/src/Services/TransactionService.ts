@@ -22,9 +22,7 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     const creditedUser = await this.transactionModel.getAccount(
       data.creditedAccountId,
     );
-    console.log(data.creditedAccountId);
     if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
-    console.log('AQUI2');
     const response = this.model.create(data);
     return response;
   };
@@ -40,7 +38,7 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     if (data.creditedAccountId === undefined) {
       return { error: MessageErrors.BAD_REQUEST };
     }
-    if (data.debitedAccountId === undefined) {
+    if (!Number.isInteger(data.creditedAccountId)) {
       return { error: MessageErrors.BAD_REQUEST };
     }
     if (data.value === undefined || data.value < 0) {
