@@ -1,6 +1,5 @@
-import { User } from '@prisma/client';
 import UserModel from '../Models/UserModel';
-import { ResponseError, UserPayload, UserToken } from '../Types/Index';
+import { ResponseError, UserPayload, UserToken, User } from '../Types/Index';
 
 import Service from './Index';
 

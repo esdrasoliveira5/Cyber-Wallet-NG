@@ -1,5 +1,4 @@
-import { Transaction, User } from '@prisma/client';
-import { TransactionPayload } from '../Types/Index';
+import { Transaction, TransactionPayload, User } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
@@ -33,7 +32,12 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
     const response = this.model.user.findUnique({
       where: {
         username: data, 
-      }, 
+      },
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+      },
     });
     return response;
   };

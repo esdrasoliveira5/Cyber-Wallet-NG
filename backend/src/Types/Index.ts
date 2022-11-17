@@ -1,4 +1,9 @@
-import { User } from '@prisma/client';
+export type User = {
+  id: string
+  username?: string
+  password?: string
+  accountId?: string
+};
 
 export type UserPayload = {
   username: string,
@@ -17,6 +22,14 @@ export type TokenType = {
 export type UserToken = {
   user: User,
   token: string,
+};
+
+export type Transaction = {
+  id: string
+  value?: number
+  createdAt?: Date
+  debitedAccountId?: string
+  creditedAccountId?: string
 };
 
 export type TransactionPayload = {

@@ -1,5 +1,5 @@
-import { User, Account } from '@prisma/client';
-import { UserPayload } from '../Types/Index';
+import { Account } from '@prisma/client';
+import { UserPayload, User } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class UserModel extends PrismaModel<User, UserPayload> {

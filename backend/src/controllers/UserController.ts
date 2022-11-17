@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '@prisma/client';
 import UserService from '../Services/UserService';
-import { UserPayload } from '../Types/Index';
+import { UserPayload, User } from '../Types/Index';
 import Controller from './Index';
 import { ControllerI } from '../Interfaces/ControllerInterface';
 
