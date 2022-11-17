@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 export type User = {
   id: string
   username?: string
@@ -34,7 +36,10 @@ export type Transaction = {
 
 export type TransactionPayload = {
   value: number,
-  debitedAccountId?: string,
-  creditedAccountId?: string,
-  creditedUsername?: string,
+  debitedAccountId: string,
+  creditedAccountId: string,
 };
+
+export interface RequestWithBody<T> extends Request {
+  body: T;
+}

@@ -1,12 +1,10 @@
 import { Request, Response } from 'express';
 import UserService from '../Services/UserService';
-import { UserPayload, User } from '../Types/Index';
+import { UserPayload, User, RequestWithBody } from '../Types/Index';
 import Controller from './Index';
-import { ControllerI } from '../Interfaces/ControllerInterface';
 import { StatusCodes } from '../enum';
 
-class UserController extends Controller<User, UserPayload >
-  implements ControllerI {
+class UserController extends Controller<User, UserPayload > {
   private _route: string;
 
   private userService: UserService;
@@ -23,7 +21,7 @@ class UserController extends Controller<User, UserPayload >
   get route() { return this._route; }
 
   create = async (
-    req: Request<UserPayload>,
+    req: RequestWithBody<UserPayload>,
     res: Response,
   ): Promise<typeof res> => {
     const { body } = req;
@@ -37,7 +35,7 @@ class UserController extends Controller<User, UserPayload >
   };
 
   getOne = async (
-    req: Request<UserPayload>,
+    req: Request,
     res: Response,
   ): Promise<typeof res> => {
     const { username } = req.params;
@@ -54,7 +52,7 @@ class UserController extends Controller<User, UserPayload >
   };
 
   login = async (
-    req: Request<User>,
+    req: RequestWithBody<UserPayload>,
     res: Response,
   ): Promise<typeof res> => {
     const { body } = req;
@@ -68,7 +66,7 @@ class UserController extends Controller<User, UserPayload >
   };
 
   getAccount = async (
-    req: Request<UserPayload>,
+    req: Request,
     res: Response,
   ): Promise<typeof res> => {
     const userToken = await this.handleAuthorization(req);

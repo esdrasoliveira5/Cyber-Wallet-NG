@@ -11,17 +11,7 @@ import {
 } from '../Types/Index';
 
 import Service from './Index';
-
-export enum MessageErrors {
-  INTERNAL = 'Internal Server Error',
-  NOT_FOUND = 'Not Found',
-  BAD_REQUEST = 'Bad Request',
-  INVALID_USERNAME = 'Invalid Username',
-  INVALID_TOKEN = 'Invalid Token',
-  INVALID_PASSWORD = 'Invalid Password',
-  CONFLICT = 'Conflict',
-  UNAUTHORIZED = 'Unauthorized',
-}
+import { MessageErrors } from '../enum';
 
 class UserService extends Service<User, UserPayload> {
   private userModel: UserModel;
@@ -53,6 +43,9 @@ class UserService extends Service<User, UserPayload> {
   };
 
   login = async (data: UserPayload): Promise<UserToken | ResponseError> => {
+    const validation = this.dataValidation(data);
+    if (validation) return validation;
+
     const user = await this.userModel.getAccount(data.username);
     if (!user) return { error: MessageErrors.UNAUTHORIZED };
 
@@ -78,11 +71,11 @@ class UserService extends Service<User, UserPayload> {
   };
 
   private dataValidation = (data: UserPayload): undefined | ResponseError => {
-    if (data.username.length < 3) {
+    if (data.username === undefined || data.username.length < 3) {
       return { error: MessageErrors.INVALID_USERNAME };
     }
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (!regex.test(data.password)) {
+    if (data.password === undefined || !regex.test(data.password)) {
       return { error: MessageErrors.INVALID_PASSWORD };
     }
   };

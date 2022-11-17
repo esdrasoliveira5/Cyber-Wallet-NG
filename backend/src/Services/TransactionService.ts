@@ -1,3 +1,4 @@
+import { MessageErrors } from '../enum';
 import TransactionModel from '../Models/TransactionModel';
 import { ResponseError, Transaction, TransactionPayload } from '../Types/Index';
 
@@ -12,13 +13,36 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     super(model);
     this.transactionModel = model;    
   }
-  create(data: TransactionPayload): Promise<Transaction | ResponseError> {
 
-    if (data.creditedUsername == undefined)
-    const creditedUser = this.transactionModel.getAccount(data.creditedUsername);
+  create = async (data: TransactionPayload):
+  Promise<Transaction | ResponseError> => {
+    const validation = this.dataValidation(data);
+    if (validation) return validation;
+
+    const creditedUser = await this.transactionModel.getAccount(
+      data.debitedAccountId,
+    );
+    if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
+
     const response = this.model.create(data);
     return response;
-  }
+  };
+
+  getOne = async (data: string): Promise<Transaction | ResponseError > => {
+    const transaction = await this.model.getOne(data);
+    if (!transaction) return { error: MessageErrors.NOT_FOUND };
+    return transaction;
+  };
+
+  private dataValidation = (data: TransactionPayload):
+  undefined | ResponseError => {
+    if (data.debitedAccountId === undefined) {
+      return { error: MessageErrors.BAD_REQUEST };
+    }
+    if (data.value === undefined || data.value < 0) {
+      return { error: MessageErrors.BAD_REQUEST };
+    }
+  };
 }
 
 export default TransactionService;

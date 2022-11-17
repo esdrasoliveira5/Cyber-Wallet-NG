@@ -3,7 +3,13 @@ import PrismaModel from './PrismaModel';
 
 class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
   create = async (data: TransactionPayload): Promise<Transaction> => 
-    this.model.transaction.create({ data });
+    this.model.transaction.create({
+      data: {
+        value: data.value,
+        debitedAccountId: data.debitedAccountId,
+        creditedAccountId: data.creditedAccountId,
+      },
+    });
 
   getOne = async (data: string): Promise<Transaction | null> => 
     this.model.transaction.findUnique({
@@ -28,12 +34,7 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
   getAccount = async (data: string): Promise<User | null> => 
     this.model.user.findUnique({
       where: {
-        username: data, 
-      },
-      select: {
-        id: true,
-        username: true,
-        accountId: true,
+        id: data, 
       },
     });
 }
