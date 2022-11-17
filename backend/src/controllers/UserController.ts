@@ -45,11 +45,7 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
 
-    return res.status(StatusCodes.CREATED).json({
-      id: response.id,
-      username: response.username,
-      accountId: response.accountId,
-    });
+    return res.status(StatusCodes.CREATED).json(response);
   };
 
   getOne = async (
@@ -66,11 +62,7 @@ class UserController extends Controller<User, UserPayload >
     if ('error' in response) {
       return res.status(StatusCodes.NOT_FOUND).json(response);
     }
-    return res.status(StatusCodes.OK).json({
-      id: response.id,
-      username: response.username,
-      accountId: response.accountId,
-    });
+    return res.status(StatusCodes.OK).json(response);
   };
 
   login = async (
@@ -96,7 +88,7 @@ class UserController extends Controller<User, UserPayload >
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
     }
     
-    const response = await this.userService.getAccount(userToken.id);
+    const response = await this.userService.getAccount(userToken.username);
 
     if ('error' in response) {
       return res.status(StatusCodes.NOT_FOUND).json(response);

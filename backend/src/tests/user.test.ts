@@ -26,7 +26,6 @@ const { expect } = chai;
 const USER_PAYLOAD = {
   id: "730d32da-6e30-40e5-b339-8050293f7ac1",
   username: "esdrasx1",
-  password: "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
   accountId: "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
 };
 
@@ -34,7 +33,6 @@ const LOGIN_PAYLOAD = {
   "user": {
       "id": "c062054e-67d5-4f66-8c33-3071b923bb66",
       "username": "esdrea12s",
-      "password": "$2b$10$HuArFmAshMdrma5DNJdcR.ekhjg2CFxyca/FTJ/Ph5s3buTxjt9Xu",
       "accountId": "ef4f3dd2-3cb6-42d1-ab90-50c129d0db6f"
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNjIwNTRlLTY3ZDUtNGY2Ni04YzMzLTMwNzFiOTIzYmI2NiIsInVzZXJuYW1lIjoiZXNkcmVhMTJzIiwiaWF0IjoxNjY4NjI3MjQxLCJleHAiOjE2Njg3MTM2NDF9.OJVbBitrrLMzw98jp6sXE9Ehht5rqvHz6KsRPxdAyjo"
@@ -157,8 +155,13 @@ describe('2 - Test endpoint POST /login', () => {
     let chaiHttpResponse: Response;
     before(() => {
       sinon
-      .stub(userModel, 'getOne')
-      .resolves(USER_PAYLOAD);
+      .stub(userModel, 'getAccount')
+      .resolves({  
+        id: "730d32da-6e30-40e5-b339-8050293f7ac1",
+        username: "esdrasx1",
+        password: "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
+        accountId: "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+      });
     });
     after(()=>{
       sinon.restore();
@@ -187,7 +190,7 @@ describe('2 - Test endpoint POST /login', () => {
     let chaiHttpResponse: Response;
     before(() => {
       sinon
-      .stub(userModel, 'getOne')
+      .stub(userModel, 'getAccount')
       .onFirstCall()
       .rejects({ error: 'Internal Server Error'})
       .onSecondCall()
@@ -316,7 +319,6 @@ describe('3 - Test endpoint GET /user/:username', () => {
     });
   });
 });
-
 
 describe('4 - Test endpoint GET /user/account', () => {
   describe('4.1 - if success', () => {

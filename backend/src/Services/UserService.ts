@@ -45,33 +45,27 @@ class UserService extends Service<User, UserPayload> {
   };
 
   login = async (data: UserPayload): Promise<UserToken | ResponseError> => {
-    const user = await this.model.getOne(data.username);
+    const user = await this.userModel.getAccount(data.username);
     if (!user) return { error: MessageErrors.UNAUTHORIZED };
 
     const passwordValidation = await this.compareIt(
       data.password, 
-      user.password,
+      user.password as string,
     );
     if (passwordValidation) return passwordValidation;
 
     const token = await this.generateToken(
-      { id: user.id, username: user.username },
+      { id: user.id, username: user.username as string },
     );
-    return { 
-      user: {
-        id: user.id,
-        username: user.username,
-        accountId: user.accountId,
-      },
-      token,
-    };
+    delete user.password;
+    return { user, token };
   };
 
   getAccount = async (data: string): 
-  Promise<Omit<User, 'password' | 'accountId'> | ResponseError> => {
+  Promise<User | ResponseError> => {
     const userAccount = await this.userModel.getAccount(data);
     if (!userAccount) return { error: MessageErrors.NOT_FOUND };
-
+    delete userAccount.password;
     return userAccount;
   };
 }

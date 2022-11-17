@@ -11,6 +11,11 @@ class UserModel extends PrismaModel<User, UserPayload> {
           ...data,
           accountId: id,
         },
+        select: {
+          id: true,
+          username: true,
+          accountId: true,
+        },
       },
     );
     return response;
@@ -20,20 +25,26 @@ class UserModel extends PrismaModel<User, UserPayload> {
     const response = this.model.user.findUnique({
       where: {
         username: data, 
-      }, 
+      },
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+      },
     });
     return response;
   };
 
   public getAccount = async (data: string):
-  Promise<Omit<User, 'password' | 'accountId'> | null> => {
+  Promise<User | null> => {
     const response = this.model.user.findUnique({
       where: {
-        id: data, 
+        username: data, 
       }, 
       select: {
         id: true,
         username: true,
+        password: true,
         account: {
           select: {
             id: true,
