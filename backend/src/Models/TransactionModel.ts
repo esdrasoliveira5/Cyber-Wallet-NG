@@ -11,7 +11,7 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       },
     });
 
-  getOne = async (data: string): Promise<Transaction | null> => 
+  getOne = async (data: number): Promise<Transaction | null> => 
     this.model.transaction.findUnique({
       where: { id: data },
       select: { id: true,
@@ -31,7 +31,7 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       }, 
     });
 
-  getAccount = async (data: string): Promise<User | null> => 
+  getAccount = async (data: number): Promise<User | null> => 
     this.model.user.findUnique({
       where: {
         id: data, 

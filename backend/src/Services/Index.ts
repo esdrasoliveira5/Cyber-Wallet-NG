@@ -7,7 +7,7 @@ abstract class Service<T, M> implements ServiceI<T, M> {
 
   abstract create(data: M): Promise<T | ResponseError>;
 
-  abstract getOne(data: string): Promise<T | ResponseError>;
+  abstract getOne(data: string | number): Promise<T | ResponseError>;
 }
 
 export default Service;

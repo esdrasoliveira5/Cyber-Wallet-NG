@@ -1,10 +1,10 @@
 import { Request } from 'express';
 
 export type User = {
-  id: string
+  id: number
   username?: string
   password?: string
-  accountId?: string
+  accountId?: number
 };
 
 export type UserPayload = {
@@ -17,7 +17,7 @@ export type ResponseError = {
 };
 
 export type TokenType = {
-  id: string;
+  id: number;
   username: string;
 };
 
@@ -27,17 +27,17 @@ export type UserToken = {
 };
 
 export type Transaction = {
-  id: string
+  id: number
   value?: number
   createdAt?: Date
-  debitedAccountId?: string
-  creditedAccountId?: string
+  debitedAccountId?: number
+  creditedAccountId?: number
 };
 
 export type TransactionPayload = {
   value: number,
-  debitedAccountId: string,
-  creditedAccountId: string,
+  debitedAccountId: number,
+  creditedAccountId: number,
 };
 
 export interface RequestWithBody<T> extends Request {

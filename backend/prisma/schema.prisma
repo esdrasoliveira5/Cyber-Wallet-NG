@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Account {
-  id                   String        @id @default(uuid())
+  id                   Int        @id @default(autoincrement())
   balance              Float         @db.DoublePrecision
   user                 User?
   debitedTransactions  Transaction[] @relation("debitedAccount")
@@ -19,19 +19,19 @@ model Account {
 }
 
 model User {
-  id        String  @id @default(uuid())
+  id        Int   @id @default(autoincrement())
   username  String  @unique
   password  String
   account   Account @relation(fields: [accountId], references: [id])
-  accountId String  @unique
+  accountId Int  @unique
 }
 
 model Transaction {
-  id                String   @id @default(uuid())
+  id                Int    @id @default(autoincrement())
   value             Float    @db.DoublePrecision
   createdAt         DateTime @default(now())
+  debitedAccountId  Int
   debitedAccount    Account  @relation("debitedAccount", fields: [debitedAccountId], references: [id])
-  debitedAccountId  String
+  creditedAccountId Int
   creditedAccount   Account  @relation("creditedAccount", fields: [creditedAccountId], references: [id])
-  creditedAccountId String
 }

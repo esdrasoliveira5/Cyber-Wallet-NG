@@ -30,7 +30,7 @@ class TransactionController
     res: Response,
   ): Promise<typeof res> => {
     const { body } = req;
-
+    
     const userToken = await this.handleAuthorization(req);
     if ('error' in userToken) {
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
@@ -41,6 +41,7 @@ class TransactionController
         debitedAccountId: userToken.id,
       },
     );
+
     if ('error' in response) {
       return res.status(StatusCodes.BAD_REQUEST).json(response);
     }
@@ -57,7 +58,7 @@ class TransactionController
     if ('error' in userToken) {
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
     }
-    const response = await this.service.getOne(id);
+    const response = await this.service.getOne(+id);
 
     if ('error' in response) {
       return res.status(StatusCodes.NOT_FOUND).json(response);

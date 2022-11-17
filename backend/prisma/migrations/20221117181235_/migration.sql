@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Account" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
@@ -8,21 +8,21 @@ CREATE TABLE "Account" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "accountId" TEXT NOT NULL,
+    "accountId" INTEGER NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Transaction" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "value" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "debitedAccountId" TEXT NOT NULL,
-    "creditedAccountId" TEXT NOT NULL,
+    "debitedAccountId" INTEGER NOT NULL,
+    "creditedAccountId" INTEGER NOT NULL,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
 );

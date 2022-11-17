@@ -20,15 +20,16 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     if (validation) return validation;
 
     const creditedUser = await this.transactionModel.getAccount(
-      data.debitedAccountId,
+      data.creditedAccountId,
     );
+    console.log(data.creditedAccountId);
     if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
-
+    console.log('AQUI2');
     const response = this.model.create(data);
     return response;
   };
 
-  getOne = async (data: string): Promise<Transaction | ResponseError > => {
+  getOne = async (data: number): Promise<Transaction | ResponseError > => {
     const transaction = await this.model.getOne(data);
     if (!transaction) return { error: MessageErrors.NOT_FOUND };
     return transaction;
@@ -36,6 +37,9 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
 
   private dataValidation = (data: TransactionPayload):
   undefined | ResponseError => {
+    if (data.creditedAccountId === undefined) {
+      return { error: MessageErrors.BAD_REQUEST };
+    }
     if (data.debitedAccountId === undefined) {
       return { error: MessageErrors.BAD_REQUEST };
     }
