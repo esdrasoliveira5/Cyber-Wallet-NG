@@ -24,26 +24,26 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 const USER_PAYLOAD = {
-  id: "730d32da-6e30-40e5-b339-8050293f7ac1",
+  id: 1,
   username: "esdrasx1",
-  accountId: "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+  accountId: 1
 };
 
 const LOGIN_PAYLOAD = {
-  "user": {
-      "id": "c062054e-67d5-4f66-8c33-3071b923bb66",
-      "username": "esdrea12s",
-      "accountId": "ef4f3dd2-3cb6-42d1-ab90-50c129d0db6f"
+  user: {
+      id: 1,
+      username: "esdrea12s",
+      accountId: 1
   },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNjIwNTRlLTY3ZDUtNGY2Ni04YzMzLTMwNzFiOTIzYmI2NiIsInVzZXJuYW1lIjoiZXNkcmVhMTJzIiwiaWF0IjoxNjY4NjI3MjQxLCJleHAiOjE2Njg3MTM2NDF9.OJVbBitrrLMzw98jp6sXE9Ehht5rqvHz6KsRPxdAyjo"
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNjIwNTRlLTY3ZDUtNGY2Ni04YzMzLTMwNzFiOTIzYmI2NiIsInVzZXJuYW1lIjoiZXNkcmVhMTJzIiwiaWF0IjoxNjY4NjI3MjQxLCJleHAiOjE2Njg3MTM2NDF9.OJVbBitrrLMzw98jp6sXE9Ehht5rqvHz6KsRPxdAyjo"
 };
 
 const USER_ACCOUNT_PAYLOAD = {
-  "id": "c062054e-67d5-4f66-8c33-3071b923bb66",
-  "username": "esdrea12s",
-  "account": {
-      "id": "ef4f3dd2-3cb6-42d1-ab90-50c129d0db6f",
-      "balance": 100
+  id: 1,
+  username: "esdrea12s",
+  account: {
+      id: 1,
+      balance: 100
   }
 };
 
@@ -74,9 +74,9 @@ describe('1 - Test endpoint POST /user', () => {
 
       expect(chaiHttpResponse).to.have.status(201);
       expect(chaiHttpResponse.body).to.deep.equal({
-        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
-        "username": "esdrasx1",
-        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+        id: 1,
+        username: "esdrasx1",
+        accountId: 1
       });
     });
   });
@@ -157,10 +157,10 @@ describe('2 - Test endpoint POST /login', () => {
       sinon
       .stub(userModel, 'getAccount')
       .resolves({  
-        id: "730d32da-6e30-40e5-b339-8050293f7ac1",
+        id: 1,
         username: "esdrasx1",
         password: "$2b$10$DmTUFuzXo29hXx7d.o7XS.hQgVx0J0o1VirwGhY4j4Y/RkW5T177K",
-        accountId: "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+        accountId: 1
       });
     });
     after(()=>{
@@ -179,9 +179,9 @@ describe('2 - Test endpoint POST /login', () => {
 
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body.user).to.deep.equal({
-        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
+        "id": 1,
         "username": "esdrasx1",
-        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+        "accountId": 1
       });
     });
   });
@@ -194,8 +194,6 @@ describe('2 - Test endpoint POST /login', () => {
       .onFirstCall()
       .rejects({ error: 'Internal Server Error'})
       .onSecondCall()
-      .resolves(null)
-      .onThirdCall()
       .resolves(null);
     });
     after(()=>{
@@ -216,27 +214,41 @@ describe('2 - Test endpoint POST /login', () => {
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
     });
 
-    it('b) return status 400 and the error message "Unauthorized" if invalid username', async () => {
+    it('b) return status 400 and the error message "Invalid Username" if invalid username', async () => {
       chaiHttpResponse = await chai
          .request(server.app)
          .post('/login')
          .set('X-API-Key', 'foobar')
          .send({
-          "username": "",
+          "username": "as",
           "password": "AaaaBbbb1",
       });
       expect(chaiHttpResponse).to.have.status(400);
-      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Invalid Username"});
     });
 
-    it('c) return status 400 and the error message "Unauthorized" if invalid password', async () => {
+    it('c) return status 400 and the error message "Invalid Password" if invalid password', async () => {
       chaiHttpResponse = await chai
          .request(server.app)
          .post('/login')
          .set('X-API-Key', 'foobar')
          .send({
           "username": "esdrasd",
-          "password": "",
+          "password": "zaasddsda",
+      });
+      expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Invalid Password"});
+    });
+
+
+    it('c) return status 400 and the error message "Unauthorized" if invalid password or username', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .post('/login')
+         .set('X-API-Key', 'foobar')
+         .send({
+          "username": "esdrasnever",
+          "password": "AaaaBbbb2",
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
@@ -265,9 +277,9 @@ describe('3 - Test endpoint GET /user/:username', () => {
 
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body).to.deep.equal({
-        "id": "730d32da-6e30-40e5-b339-8050293f7ac1",
-        "username": "esdrasx1",
-        "accountId": "629a94e4-9c37-440d-a90d-6a7b3b7d7c75"
+        id: 1,
+        username: "esdrasx1",
+        accountId: 1
       });
     });
   });
@@ -341,11 +353,11 @@ describe('4 - Test endpoint GET /user/account', () => {
 
       expect(chaiHttpResponse).to.have.status(200);
       expect(chaiHttpResponse.body).to.deep.equal({
-        "id": "c062054e-67d5-4f66-8c33-3071b923bb66",
-        "username": "esdrea12s",
-        "account": {
-            "id": "ef4f3dd2-3cb6-42d1-ab90-50c129d0db6f",
-            "balance": 100
+        id: 1,
+        username: "esdrea12s",
+        account: {
+            id: 1,
+            balance: 100
         }
       });
     });

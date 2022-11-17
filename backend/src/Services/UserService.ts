@@ -75,7 +75,7 @@ class UserService extends Service<User, UserPayload> {
       return { error: MessageErrors.INVALID_USERNAME };
     }
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (data.password === undefined || !regex.test(data.password)) {
+    if (!regex.test(data.password)) {
       return { error: MessageErrors.INVALID_PASSWORD };
     }
   };
