@@ -1,3 +1,4 @@
+import { Account } from '@prisma/client';
 import { MessageErrors } from '../enum';
 import TransactionModel from '../Models/TransactionModel';
 import { ResponseError, Transaction, TransactionPayload } from '../Types/Index';
@@ -23,6 +24,14 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
       data.creditedAccountId,
     );
     if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
+    const userbalance = await this.transactionModel.getAccount(
+      data.debitedAccountId,
+    ) as Account;
+
+    if ((userbalance.balance - data.value) < 0) {
+      return { error: 'Insufficient balance' };
+    }
+
     const response = this.model.create(data);
     return response;
   };

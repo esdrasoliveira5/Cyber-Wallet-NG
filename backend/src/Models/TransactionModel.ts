@@ -1,15 +1,18 @@
-import { Transaction, TransactionPayload, User } from '../Types/Index';
+import { Account } from '@prisma/client';
+import { Transaction, TransactionPayload } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
-  create = async (data: TransactionPayload): Promise<Transaction> => 
-    this.model.transaction.create({
+  create = async (data: TransactionPayload): Promise<Transaction> => {
+    await this.debitValue(data);
+    return this.model.transaction.create({
       data: {
         value: data.value,
         debitedAccountId: data.debitedAccountId,
         creditedAccountId: data.creditedAccountId,
       },
     });
+  };
 
   getOne = async (data: number): Promise<Transaction | null> => 
     this.model.transaction.findUnique({
@@ -31,12 +34,33 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       }, 
     });
 
-  getAccount = async (data: number): Promise<User | null> => 
-    this.model.user.findUnique({
+  getAccount = async (data: number): Promise<Account | null> => 
+    this.model.account.findUnique({
       where: {
         id: data, 
       },
     });
+
+  debitValue = async (data: TransactionPayload): Promise<boolean> => {
+    await this.model.account.update({
+      where: { id: data.debitedAccountId },
+      data: {
+        balance: {
+          decrement: data.value,
+        },
+      },
+    });
+    await this.model.account.update({
+      where: { id: data.creditedAccountId },
+      data: {
+        balance: {
+          increment: data.value,
+        },
+      },
+    });
+
+    return true;
+  };
 }
 
 export default TransactionModel;
