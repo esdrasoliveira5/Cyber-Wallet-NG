@@ -166,3 +166,82 @@ describe('1 - Test endpoint POST /transaction', () => {
     });
   });
 });
+
+describe('2 - Test endpoint POST /transaction', () => {
+  describe('2.1 - if success', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(transactionModel, 'getOne')
+      .resolves(TRANSACTION_PAYLOAD);
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 200 and the transaction', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction/1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.deep.equal({
+        id: 1,
+        value: 50,
+        createdAt: "2022-11-17T18:23:24.116Z",
+        debitedAccountId: 1,
+        creditedAccountId: 2
+      });
+    });
+  });
+
+  describe('1.2 - if fail', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(transactionModel, 'getOne')
+      .onFirstCall()
+      .resolves(null)
+      .onSecondCall()
+      .rejects({ error: 'Internal Server Error'});
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 401 and the error message "Unauthorized" if Authorization token is invalid', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction/1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', '')
+
+      expect(chaiHttpResponse).to.have.status(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
+    });
+
+    it('b) return status 404 and the error message "Not Found"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction/1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(404);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Not Found"});
+    });
+
+    it('c) return status 500 and the error message "Internal Server Error"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction/1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(500);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+    });
+  });
+});
