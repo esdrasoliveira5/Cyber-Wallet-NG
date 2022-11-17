@@ -3,18 +3,7 @@ import UserService from '../Services/UserService';
 import { UserPayload, User } from '../Types/Index';
 import Controller from './Index';
 import { ControllerI } from '../Interfaces/ControllerInterface';
-
-export enum StatusCodes {
-  OK = 200,
-  CREATED,
-  NO_CONTENT = 204,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED,
-  NOT_FOUND = 404,
-  CONFLICT = 409,
-  INVALID = 422,
-  INTERNAL = 500,
-}
+import { StatusCodes } from '../enum';
 
 class UserController extends Controller<User, UserPayload >
   implements ControllerI {

@@ -1,5 +1,14 @@
+import bcrypt = require('bcrypt');
+import { sign, SignOptions } from 'jsonwebtoken';
+import * as path from 'path';
+import fs = require('fs');
 import UserModel from '../Models/UserModel';
-import { ResponseError, UserPayload, UserToken, User } from '../Types/Index';
+import { 
+  ResponseError, 
+  UserPayload, 
+  UserToken, User, 
+  TokenType,
+} from '../Types/Index';
 
 import Service from './Index';
 
@@ -66,6 +75,38 @@ class UserService extends Service<User, UserPayload> {
     if (!userAccount) return { error: MessageErrors.NOT_FOUND };
     delete userAccount.password;
     return userAccount;
+  };
+
+  private dataValidation = (data: UserPayload): undefined | ResponseError => {
+    if (data.username.length < 3) {
+      return { error: MessageErrors.INVALID_USERNAME };
+    }
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!regex.test(data.password)) {
+      return { error: MessageErrors.INVALID_PASSWORD };
+    }
+  };
+
+  private hashIt = async (password: string): Promise<string> => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+  };
+
+  private compareIt = async (password: string, hashedPassword: string):
+  Promise<void | ResponseError> => {
+    const response = await bcrypt.compare(password, hashedPassword);
+    if (!response) {
+      return { error: MessageErrors.UNAUTHORIZED };
+    }
+  };
+
+  private generateToken = async (data: TokenType): Promise<string> => {
+    const secret = fs.readFileSync(path.resolve('jwt.evaluation.key'), 'utf8');
+    const jwtConfig: SignOptions = { expiresIn: '1d', algorithm: 'HS256' };
+
+    const token: string = sign(data, secret, jwtConfig);
+    return token;
   };
 }
 

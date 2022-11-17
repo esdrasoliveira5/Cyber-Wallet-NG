@@ -2,17 +2,16 @@ import { Transaction, TransactionPayload, User } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
-  create = async (data: TransactionPayload): Promise<Transaction> => {
-    const response = this.model.transaction.create({ data });
-    return response;
-  };
+  create = async (data: TransactionPayload): Promise<Transaction> => 
+    this.model.transaction.create({ data });
 
-  getOne = async (data: string): Promise<Transaction | null> => {
-    const response = this.model.transaction.findUnique({
+  getOne = async (data: string): Promise<Transaction | null> => 
+    this.model.transaction.findUnique({
       where: { id: data },
       select: { id: true,
         value: true,
         debitedAccountId: true,
+        createdAt: true,
         creditedAccount: {
           select: { id: true,
             user: {
@@ -25,11 +24,9 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
         },
       }, 
     });
-    return response;
-  };
 
-  getAccount = async (data: string): Promise<User | null> => {
-    const response = this.model.user.findUnique({
+  getAccount = async (data: string): Promise<User | null> => 
+    this.model.user.findUnique({
       where: {
         username: data, 
       },
@@ -39,8 +36,6 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
         accountId: true,
       },
     });
-    return response;
-  };
 }
 
 export default TransactionModel;

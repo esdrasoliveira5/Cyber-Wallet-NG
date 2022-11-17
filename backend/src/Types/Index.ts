@@ -34,6 +34,7 @@ export type Transaction = {
 
 export type TransactionPayload = {
   value: number,
-  debitedAccountId: string,
-  creditedAccountId: string,
+  debitedAccountId?: string,
+  creditedAccountId?: string,
+  creditedUsername?: string,
 };

@@ -5,7 +5,7 @@ import PrismaModel from './PrismaModel';
 class UserModel extends PrismaModel<User, UserPayload> {
   create = async (data: UserPayload): Promise<User> => {
     const { id } = await this.accountCreate();
-    const response = this.model.user.create(
+    return this.model.user.create(
       {
         data: {
           ...data,
@@ -18,11 +18,10 @@ class UserModel extends PrismaModel<User, UserPayload> {
         },
       },
     );
-    return response;
   };
 
-  getOne = async (data: string): Promise<User | null> => {
-    const response = this.model.user.findUnique({
+  getOne = async (data: string): Promise<User | null> => 
+    this.model.user.findUnique({
       where: {
         username: data, 
       },
@@ -32,12 +31,9 @@ class UserModel extends PrismaModel<User, UserPayload> {
         accountId: true,
       },
     });
-    return response;
-  };
 
-  public getAccount = async (data: string):
-  Promise<User | null> => {
-    const response = this.model.user.findUnique({
+  public getAccount = async (data: string): Promise<User | null> => 
+    this.model.user.findUnique({
       where: {
         username: data, 
       }, 
@@ -53,21 +49,15 @@ class UserModel extends PrismaModel<User, UserPayload> {
         },
       },
     });
-    return response;
-  };
 
-  private accountCreate = async (): 
-  Promise<Account> => {
-    const response = this.model.account.create(
+  private accountCreate = async (): Promise<Account> => 
+    this.model.account.create(
       {
         data: {
           balance: 100.00,
         },
       },
     );
-
-    return response;
-  };
 }
 
 export default UserModel;
