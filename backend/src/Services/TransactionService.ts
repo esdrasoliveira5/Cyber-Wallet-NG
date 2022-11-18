@@ -1,7 +1,12 @@
-import { Account } from '@prisma/client';
 import { MessageErrors } from '../enum';
 import TransactionModel from '../Models/TransactionModel';
-import { ResponseError, Transaction, TransactionPayload } from '../Types/Index';
+import { 
+  ResponseError, 
+  Transaction, 
+  TransactionDTO, 
+  TransactionPayload, 
+  User,
+} from '../Types/Index';
 
 import Service from './Index';
 
@@ -15,26 +20,27 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     this.transactionModel = model;    
   }
 
-  create = async (data: TransactionPayload):
+  create = async (data: TransactionDTO):
   Promise<Transaction | ResponseError> => {
-    const validation = this.dataValidation(data);
-    if (validation) return validation;
+    const validation = await this.dataValidation(data);
+    if ('error' in validation) return validation;
 
-    const creditedUser = await this.transactionModel.getAccount(
-      data.creditedAccountId,
-    );
-    if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
     const userbalance = await this.transactionModel.getAccount(
-      data.debitedAccountId,
-    ) as Account;
-    if (data.creditedAccountId === data.debitedAccountId) {
+      data.debitedUsername,
+    ) as User;
+
+    if (validation.accountId === userbalance.accountId) {
       return { error: MessageErrors.BAD_REQUEST };
     }
-    if ((userbalance.balance - data.value) < 0) {
+
+    if ((userbalance.account?.balance as number - data.value) < 0) {
       return { error: 'Insufficient balance' };
     }
-
-    const response = this.model.create(data);
+    const response = this.model.create({ 
+      value: data.value,
+      creditedAccountId: validation.accountId, 
+      debitedAccountId: userbalance.accountId,
+    } as TransactionPayload);
     return response;
   };
 
@@ -44,17 +50,21 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     return transaction;
   };
 
-  private dataValidation = (data: TransactionPayload):
-  undefined | ResponseError => {
-    if (data.creditedAccountId === undefined) {
-      return { error: MessageErrors.BAD_REQUEST };
-    }
-    if (!Number.isInteger(data.creditedAccountId)) {
+  private dataValidation = async (data: TransactionDTO):
+  Promise<User | ResponseError> => {
+    if (data.creditedUsername === undefined) {
       return { error: MessageErrors.BAD_REQUEST };
     }
     if (data.value === undefined || data.value < 0) {
       return { error: MessageErrors.BAD_REQUEST };
     }
+
+    const creditedUser = await this.transactionModel.getAccount(
+      data.creditedUsername,
+    );
+    if (!creditedUser) return { error: MessageErrors.BAD_REQUEST };
+
+    return creditedUser;
   };
 }
 

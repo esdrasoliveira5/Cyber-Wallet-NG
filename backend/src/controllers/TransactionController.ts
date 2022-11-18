@@ -4,6 +4,7 @@ import { StatusCodes } from '../enum';
 import {
   RequestWithBody,
   Transaction,
+  TransactionDTO,
   TransactionPayload,
 } from '../Types/Index';
 import TransactionService from '../Services/TransactionService';
@@ -26,7 +27,7 @@ class TransactionController
   get route() { return this._route; }
 
   create = async (
-    req: RequestWithBody<TransactionPayload>,
+    req: RequestWithBody<TransactionDTO>,
     res: Response,
   ): Promise<typeof res> => {
     const { body } = req;
@@ -38,7 +39,7 @@ class TransactionController
 
     const response = await this.service.create(
       { ...body, 
-        debitedAccountId: userToken.id,
+        debitedUsername: userToken.username,
       },
     );
 

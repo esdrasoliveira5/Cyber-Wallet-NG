@@ -5,6 +5,9 @@ export type User = {
   username?: string
   password?: string
   accountId?: number
+  account?: {
+    balance: number
+  }
 };
 
 export type UserPayload = {
@@ -38,6 +41,12 @@ export type TransactionPayload = {
   value: number,
   debitedAccountId: number,
   creditedAccountId: number,
+};
+
+export type TransactionDTO = {
+  value: number,
+  debitedUsername: string,
+  creditedUsername: string,
 };
 
 export interface RequestWithBody<T> extends Request {

@@ -36,12 +36,29 @@ const TRANSACTION_PAYLOAD = {
 
 const ACCOUNT_PAYLOAD = {
   id: 2,
-  balance: 100
+  username: 'esdrasteste2',
+  password: 'password',
+  accountId: 2,
 };
 
 const DEBIT_ACCOUNT_PAYLOAD = {
   id: 1,
-  balance: 100
+  username: 'esdrasteste1',
+  password: 'password',
+  accountId: 1,
+  account: {
+    balance: 100
+  }
+}
+
+const DEBIT_ACCOUNT_ZERO_PAYLOAD_ = {
+  id: 1,
+  username: 'esdrasteste1',
+  password: 'password',
+  accountId: 1,
+  account: {
+    balance: 0
+  }
 }
 
 describe('1 - Test endpoint POST /transaction', () => {
@@ -70,7 +87,7 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', TOKEN)
          .send({
           "value": 50,
-          "creditedAccountId": 2
+          "creditedUsername": "esdrasteste2"
       });
 
       expect(chaiHttpResponse).to.have.status(201);
@@ -94,10 +111,7 @@ describe('1 - Test endpoint POST /transaction', () => {
       .onSecondCall()
       .resolves(ACCOUNT_PAYLOAD)
       .onThirdCall()
-      .resolves({
-        id: 1,
-        balance: 0
-      });
+      .resolves(DEBIT_ACCOUNT_ZERO_PAYLOAD_);
     });
     after(()=>{
       sinon.restore();
@@ -111,7 +125,7 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', '')
          .send({
           "value": 50,
-          "creditedAccountId": 2
+          "creditedUsername": "esdrasteste2"
       });
       expect(chaiHttpResponse).to.have.status(401);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
@@ -125,7 +139,7 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', TOKEN)
          .send({
           "value": -100,
-          "creditedAccountId": 2
+          "creditedUsername": "esdrasteste2"
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Bad Request"});
@@ -139,7 +153,6 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', TOKEN)
          .send({
           "value": 100,
-          "creditedAccountId": "user123"
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Bad Request"});
@@ -153,11 +166,12 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', TOKEN)
          .send({
           "value": 100,
-          "creditedAccountId": 50
+          "creditedUsername": "e22sdrasteste2"
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Bad Request"});
     });
+
     it('e) return status 400 and the error message "Insufficient balance"', async () => {
       chaiHttpResponse = await chai
          .request(server.app)
@@ -166,7 +180,7 @@ describe('1 - Test endpoint POST /transaction', () => {
          .set('authorization', TOKEN)
          .send({
           "value": 50,
-          "creditedAccountId": 50
+          "creditedUsername": "esdrasteste2"
       });
       expect(chaiHttpResponse).to.have.status(400);
       expect(chaiHttpResponse.body).to.deep.equal({ "error": "Insufficient balance"});

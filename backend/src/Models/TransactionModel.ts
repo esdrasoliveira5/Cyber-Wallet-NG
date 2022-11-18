@@ -1,4 +1,4 @@
-import { Account } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Transaction, TransactionPayload } from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
@@ -34,10 +34,21 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       }, 
     });
 
-  getAccount = async (data: number): Promise<Account | null> => 
-    this.model.account.findUnique({
+  getAccount = async (data: string): Promise<User | null> => 
+    this.model.user.findUnique({
       where: {
-        id: data, 
+        username: data, 
+      },
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+        password: true,
+        account: {
+          select: {
+            balance: true,
+          },
+        },
       },
     });
 
