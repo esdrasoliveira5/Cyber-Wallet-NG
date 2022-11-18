@@ -32,6 +32,15 @@ class UserModel extends PrismaModel<User, UserPayload> {
       },
     });
 
+  getAll = async (): Promise<User[]> => 
+    this.model.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+      },
+    });
+
   public getAccount = async (data: string): Promise<User | null> => 
     this.model.user.findUnique({
       where: {
