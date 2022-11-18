@@ -34,6 +34,23 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       }, 
     });
 
+  getAll = async (data: number): Promise<Transaction []> =>
+    this.model.transaction.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      where: {
+        OR: [
+          {
+            creditedAccountId: data,
+          },
+          {
+            debitedAccountId: data,
+          },
+        ],
+      },
+    });
+
   getAccount = async (data: string): Promise<User | null> => 
     this.model.user.findUnique({
       where: {
