@@ -47,6 +47,7 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
   getOne = async (data: number): Promise<Transaction | ResponseError > => {
     const transaction = await this.model.getOne(data);
     if (!transaction) return { error: MessageErrors.NOT_FOUND };
+
     return transaction;
   };
 

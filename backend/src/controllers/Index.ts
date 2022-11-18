@@ -17,6 +17,9 @@ abstract class Controller<T, M> implements ControllerI {
   abstract getOne(req: Request, res: Response):
   Promise<typeof res>;
 
+  abstract getAll(req: Request, res: Response):
+  Promise<typeof res>;
+
   protected handleAuthorization = async (req: Request)
   : Promise<TokenType | ResponseError> => {
     const { authorization } = req.headers;

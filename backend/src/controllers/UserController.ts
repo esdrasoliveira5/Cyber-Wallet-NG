@@ -51,6 +51,19 @@ class UserController extends Controller<User, UserPayload > {
     return res.status(StatusCodes.OK).json(response);
   };
 
+  getAll = async (
+    req: Request,
+    res: Response,
+  ): Promise<typeof res> => {
+    const userToken = await this.handleAuthorization(req);
+    if ('error' in userToken) {
+      return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
+    }
+    const response = await this.service.getAll(null);
+
+    return res.status(StatusCodes.OK).json(response);
+  };
+
   login = async (
     req: RequestWithBody<UserPayload>,
     res: Response,

@@ -6,4 +6,6 @@ export interface ServiceI<T, M> {
   
   getOne(data: string | number): Promise<T | ResponseError>;
 
+  getAll(data: number | null): Promise<T[]>;
+
 }
