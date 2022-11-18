@@ -8,6 +8,8 @@ abstract class Service<T, M> implements ServiceI<T, M> {
   abstract create(data: M | TransactionDTO): Promise<T | ResponseError>;
 
   abstract getOne(data: string | number): Promise<T | ResponseError>;
+
+  abstract getAll(data: number | null): Promise<T[]>;
 }
 
 export default Service;

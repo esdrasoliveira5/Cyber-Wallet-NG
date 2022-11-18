@@ -50,6 +50,11 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     return transaction;
   };
 
+  getAll = async (data: number): Promise<Transaction[]> => {
+    const transactions = await this.model.getAll(data);
+    return transactions;
+  };
+
   private dataValidation = async (data: TransactionDTO):
   Promise<User | ResponseError> => {
     if (data.creditedUsername === undefined) {

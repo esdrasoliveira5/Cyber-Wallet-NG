@@ -42,6 +42,11 @@ class UserService extends Service<User, UserPayload> {
     return user;
   };
 
+  getAll = async (): Promise<User[]> => {
+    const users = await this.model.getAll(null); 
+    return users;
+  };
+
   login = async (data: UserPayload): Promise<UserToken | ResponseError> => {
     const validation = this.dataValidation(data);
     if (validation) return validation;
