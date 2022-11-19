@@ -1,4 +1,5 @@
 import express, { Router, Request, Response } from 'express';
+import Cors from 'cors';
 import HandleError from './middlewares/HandleError';
 
 require('express-async-errors');
@@ -10,6 +11,7 @@ class App {
 
   constructor() {
     this.app = express();
+    this.app.use(Cors());
     this.app.use(express.json());
     this.app.get('/', async (_req: Request, resp: Response) => {
       resp.status(200).json({

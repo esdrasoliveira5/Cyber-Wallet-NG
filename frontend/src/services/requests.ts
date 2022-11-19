@@ -7,7 +7,7 @@ import {
   UserPayload,
 } from '../types';
 
-const URL_FETCH = 'http://localhost:3000';
+const URL_FETCH = 'http://localhost:3001';
 const APLICATION = 'application/json';
 
 async function login(data: UserPayload): Promise<UserLogin | ResponseError> {
