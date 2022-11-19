@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { AppContextInterface } from '../types';
+import { AppContextInterface } from '../interfaces';
 
 const cyberWalletContext = createContext<AppContextInterface | null>(null);
 

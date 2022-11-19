@@ -1,11 +1,3 @@
-export type AppContextInterface = {
-  logged?: {
-    logged: boolean;
-    id: string;
-    username: string;
-  };
-};
-
 export type UserPayload = {
   username: string;
   password: string;
@@ -32,7 +24,9 @@ export type UserLogin = {
 };
 
 export type ResponseError = {
-  error: string;
+  error: {
+    error: string;
+  };
 };
 
 export type TransactionPayload = {
@@ -46,4 +40,19 @@ export type Transaction = {
   createdAt: string;
   debitedAccountId: number;
   creditedAccountId: number;
+};
+
+export type LoginState = {
+  login: {
+    logged: boolean;
+    id: number;
+    username: string;
+  };
+  setlogin: React.Dispatch<
+    React.SetStateAction<{
+      logged: boolean;
+      id: number;
+      username: string;
+    }>
+  >;
 };
