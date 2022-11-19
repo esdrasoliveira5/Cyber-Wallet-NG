@@ -1,14 +1,15 @@
 import { createGlobalStyle } from 'styled-components';
 
-export default createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
    *{
        margin: 0;
        padding: 0;
        outline:0;
        box-sizing:border-box;
-       font-family: 'Open Sans', sans-serif; 
+       font-family: 'Open Sans', sans-serif;
    }
    #root{
        margin:0 auto;
+       background: linear-gradient(90deg, #32a791 0%, #0d2924 100%);
    }
 `;

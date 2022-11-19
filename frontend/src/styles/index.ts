@@ -36,3 +36,44 @@ export const FormLoginS = styled.form`
     background-color: #660708;
   }
 `;
+
+export const PageS = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+`;
+
+export const FooterS = styled.footer`
+  background-color: #0b090a;
+  color: #f5f3f4;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+`;
+
+export const HeaderS = styled.header`
+  font-size: 15px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: rgb(47, 193, 140, 0.8);
+  color: #f5f3f4;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  img {
+    width: 200px;
+  }
+`;

@@ -1,9 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Footer from '../components/Footer';
 import FormLogin from '../components/FormLogin';
+import Header from '../components/Header';
 import cyberWalletContext from '../context/AppContext';
 import requests from '../services/requests';
+import { PageS } from '../styles';
 import { LoginState, UserLogin } from '../types';
 
 function Login() {
@@ -34,9 +37,11 @@ function Login() {
   }, []);
 
   return (
-    <div>
+    <PageS>
+      <Header />
       <FormLogin />
-    </div>
+      <Footer />
+    </PageS>
   );
 }
 
