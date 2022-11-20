@@ -24,12 +24,16 @@ function Header() {
         <img src={wallet} alt="wallet"></img>
         <p>Cyber Wallet</p>
       </div>
-      <div>
-        <span>{login.username}</span>
-        <button type="button" onClick={handleLogin}>
-          Sair
-        </button>
-      </div>
+      {login.logged ? (
+        <div>
+          <span>{login.username}</span>
+          <button type="button" onClick={handleLogin}>
+            Sair
+          </button>
+        </div>
+      ) : (
+        ''
+      )}
     </HeaderS>
   );
 }
