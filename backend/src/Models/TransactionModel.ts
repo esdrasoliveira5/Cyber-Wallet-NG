@@ -37,15 +37,15 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
   getAll = async (data: number): Promise<Transaction []> =>
     this.model.transaction.findMany({
       orderBy: { createdAt: 'desc' },
-      where: {
-        OR: [
-          { creditedAccountId: data },
-          { debitedAccountId: data },
-        ],
+      where: { OR: [
+        { creditedAccountId: data },
+        { debitedAccountId: data },
+      ],
       },
       select: {
         id: true,
         value: true,
+        createdAt: true,
         debitedAccount: {
           select: { id: true, user: { select: { id: true, username: true } } },
         },

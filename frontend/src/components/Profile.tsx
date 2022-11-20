@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import ProfilePic from '../../resources/profile_pic.jpg';
 import cyberWalletContext from '../context/AppContext';
-import requests from '../services/requests';
 import { ContentS, NavCategoriesS, ProfileInfoS, ProfileS, SidebarS } from '../styles';
-import { AccountState, LoginState, Transaction, UserLogin } from '../types';
+import { AccountState, LoginState } from '../types';
 import Table from './Table';
 
 function Profile() {
