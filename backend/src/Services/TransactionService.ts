@@ -37,7 +37,7 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
       return { error: 'Insufficient balance' };
     }
     const response = this.model.create({ 
-      value: data.value,
+      value: +data.value,
       creditedAccountId: validation.accountId, 
       debitedAccountId: userbalance.accountId,
     } as TransactionPayload);

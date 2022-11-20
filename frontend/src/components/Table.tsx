@@ -14,7 +14,6 @@ function Table() {
       if (localResponse !== null) {
         const { token }: UserLogin = JSON.parse(localResponse);
         const transactions = (await requests.getAllTransactions(token)) as Transaction[];
-        console.log(transactions);
         if (!('error' in transactions)) {
           setTransactions(transactions);
         }
@@ -22,6 +21,13 @@ function Table() {
     };
     getTransactions();
   }, []);
+
+  const formatValue = (data: number) => {
+    return data.toLocaleString('pt-br', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
 
   if (transactions.length === 0) {
     return <h1>Voce nao tem pedidos</h1>;
@@ -52,7 +58,11 @@ function Table() {
             }) => (
               <tr key={id}>
                 <td>{id}</td>
-                <td>{login.id == debitedId ? `- ${value}` : `+ ${value}`}</td>
+                <td>
+                  {login.id == debitedId
+                    ? `- ${formatValue(value)}`
+                    : `+ ${formatValue(value)}`}
+                </td>
                 <td>{login.id == debitedId ? credited : debited}</td>
                 <td>{new Date(createdAt).toLocaleString()}</td>
               </tr>

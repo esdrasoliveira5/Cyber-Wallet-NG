@@ -5,10 +5,13 @@ import cyberWalletContext from '../context/AppContext';
 import { ContentS, NavCategoriesS, ProfileInfoS, ProfileS, SidebarS } from '../styles';
 import { AccountState, LoginState } from '../types';
 import Table from './Table';
+import Transaction from './Transcation';
 
 function Profile() {
   const { login } = useContext(cyberWalletContext) as LoginState;
   const { account } = useContext(cyberWalletContext) as AccountState;
+  const [content, setContent] = useState('transactions');
+
   return (
     <ProfileS>
       <SidebarS>
@@ -16,21 +19,25 @@ function Profile() {
           <img src={ProfilePic} alt="avatar" />
           <div>
             <h3>{login.username}</h3>
-            <h2>Saldo R${account.balance.toPrecision(4)}</h2>
+            <h2>
+              <p>Saldo</p>
+              {account.balance.toLocaleString('pt-br', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
+            </h2>
           </div>
         </ProfileInfoS>
         <NavCategoriesS>
-          <button value="" type="button" key="0">
+          <button type="button" onClick={() => setContent('transactions')}>
             Histórico de Transacoes
           </button>
-          <button value={1} type="button" key={1}>
+          <button type="button" onClick={() => setContent('transfer')}>
             Tranferir
           </button>
         </NavCategoriesS>
       </SidebarS>
-      <ContentS>
-        <Table />
-      </ContentS>
+      <ContentS>{content === 'transactions' ? <Table /> : <Transaction />}</ContentS>
     </ProfileS>
   );
 }

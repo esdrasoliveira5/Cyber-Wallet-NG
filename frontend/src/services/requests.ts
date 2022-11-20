@@ -88,7 +88,7 @@ async function createTransaction(
 ): Promise<Transaction | ResponseError> {
   try {
     const response: Response = await fetch(`${URL_FETCH}/transaction`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         Accept: APLICATION,
         'Content-Type': APLICATION,

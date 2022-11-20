@@ -17,11 +17,19 @@ export const FormS = styled.form`
   input:focus {
     background: #dbdbdb;
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
   button {
     margin-top: 10px;
     text-transform: uppercase;
     outline: 0;
-    background: #e5383b;
+    background-color: rgb(47, 193, 140);
     width: 100%;
     border: 0;
     border-radius: 5px;
@@ -32,6 +40,11 @@ export const FormS = styled.form`
     transition: all 0.3 ease;
     cursor: pointer;
   }
+
+  button:nth-child(even) {
+    background-color: #e5383b;
+  }
+
   button:hover {
     background-color: #660708;
   }
