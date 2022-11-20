@@ -42,9 +42,14 @@ function Main() {
   return (
     <PageS>
       <Header />
-      <MainS>
-        <Profile />
-      </MainS>
+      {login.logged ? (
+        <MainS>
+          <Profile />
+        </MainS>
+      ) : (
+        ''
+      )}
+
       <Footer />
     </PageS>
   );

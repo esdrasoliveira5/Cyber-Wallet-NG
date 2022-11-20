@@ -45,19 +45,22 @@ function Table() {
         </thead>
         <tbody>
           {transactions.map(
-            ({
-              id,
-              createdAt,
-              value,
-              debitedAccount: {
-                user: { id: debitedId, username: debited },
+            (
+              {
+                id,
+                createdAt,
+                value,
+                debitedAccount: {
+                  user: { id: debitedId, username: debited },
+                },
+                creditedAccount: {
+                  user: { username: credited },
+                },
               },
-              creditedAccount: {
-                user: { username: credited },
-              },
-            }) => (
+              i,
+            ) => (
               <tr key={id}>
-                <td>{id}</td>
+                <td>{transactions.length - i}</td>
                 <td>
                   {login.id == debitedId
                     ? `- ${formatValue(value)}`

@@ -30,10 +30,10 @@ function Profile() {
         </ProfileInfoS>
         <NavCategoriesS>
           <button type="button" onClick={() => setContent('transactions')}>
-            Histórico de Transacoes
+            Histórico de transações
           </button>
           <button type="button" onClick={() => setContent('transfer')}>
-            Tranferir
+            Enviar dinheiro
           </button>
         </NavCategoriesS>
       </SidebarS>

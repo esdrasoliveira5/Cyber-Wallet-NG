@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const FormS = styled.form`
   display: flex;
   flex-direction: column;
+  padding-top: 50px;
   input {
     outline: 0;
     background: #f2f2f2;
@@ -120,21 +121,19 @@ export const HeaderS = styled.header`
 export const MainS = styled.main`
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   border-radius: 10px;
-  max-width: 1000px;
   width: 100%;
+  max-width: 1000px;
   padding: 45px;
   text-align: center;
-  overflow: hidden;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 export const MainForFormS = styled.main`
   position: relative;
   z-index: 1;
   background: rgba(255, 255, 255, 0.2);
+  color: white;
   backdrop-filter: blur(8px);
   border-radius: 10px;
   max-width: 350px;
@@ -209,9 +208,16 @@ export const NavCategoriesS = styled.nav`
 export const ContentS = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
+  max-height: 450px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  h1 {
+    padding-top: 50px;
+  }
 `;
 
 export const TableS = styled.div`

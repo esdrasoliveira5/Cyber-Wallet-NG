@@ -40,6 +40,7 @@ function Login() {
     <PageS>
       <Header />
       <MainForFormS>
+        <p>Faça login ou crie uma conta</p>
         <FormLogin />
       </MainForFormS>
       <Footer />

@@ -46,7 +46,7 @@ function Transaction() {
   return (
     <FormS>
       <label htmlFor="username">
-        <p>Pra quem vc quer transferir ?</p>
+        <p>Pra quem vamos enviar ?</p>
         <input
           name="creditedUsername"
           type="text"
@@ -56,7 +56,7 @@ function Transaction() {
         />
       </label>
       <label htmlFor="password">
-        <p>Qual valor vc quer transferir ?</p>
+        <p>Qual o valor você quer enviar ?</p>
         <input
           name="value"
           type="number"
