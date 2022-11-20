@@ -24,9 +24,8 @@ export type TokenType = {
   username: string;
 };
 
-export type UserToken = {
-  user: User,
-  token: string,
+export type Token<T> = T & {
+  token: string
 };
 
 export type Transaction = {

@@ -24,9 +24,7 @@ export type UserLogin = {
 };
 
 export type ResponseError = {
-  error: {
-    error: string;
-  };
+  error: string;
 };
 
 export type TransactionPayload = {
@@ -48,11 +46,11 @@ export type LoginState = {
     id: number;
     username: string;
   };
-  setlogin: React.Dispatch<
-    React.SetStateAction<{
-      logged: boolean;
-      id: number;
-      username: string;
-    }>
-  >;
+  setLogin: (data: Login) => void;
+};
+
+export type Login = {
+  logged: boolean;
+  id: number;
+  username: string;
 };

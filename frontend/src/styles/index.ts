@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const FormLoginS = styled.form`
+export const FormS = styled.form`
   display: flex;
   flex-direction: column;
   input {
@@ -75,5 +75,33 @@ export const HeaderS = styled.header`
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   img {
     width: 200px;
+  }
+`;
+
+export const MainS = styled.main`
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  max-width: 350px;
+  width: 100%;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  img {
+    width: 100%;
+  }
+  @media screen and (max-width: 1100px) {
+    position: absolute;
+    width: 80%;
+  }
+  @media screen and (max-width: 600px) {
+    position: absolute;
+    width: 100%;
+    margin-top: 100px;
+    max-width: 500px;
   }
 `;

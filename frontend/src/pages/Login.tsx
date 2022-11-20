@@ -6,12 +6,12 @@ import FormLogin from '../components/FormLogin';
 import Header from '../components/Header';
 import cyberWalletContext from '../context/AppContext';
 import requests from '../services/requests';
-import { PageS } from '../styles';
+import { MainS, PageS } from '../styles';
 import { LoginState, UserLogin } from '../types';
 
 function Login() {
   const navigate = useNavigate();
-  const { login, setlogin } = useContext(cyberWalletContext) as LoginState;
+  const { login, setLogin } = useContext(cyberWalletContext) as LoginState;
 
   useEffect(() => {
     const userLogged = async () => {
@@ -20,9 +20,9 @@ function Login() {
         const { token }: UserLogin = JSON.parse(localResponse);
         const response = await requests.getUser('account', token);
         if ('error' in response) {
-          setlogin({ ...login, logged: false });
+          setLogin({ ...login, logged: false });
         } else {
-          setlogin({
+          setLogin({
             id: response.id,
             username: response.username,
             logged: true,
@@ -30,7 +30,7 @@ function Login() {
           navigate('/wallet');
         }
       } else {
-        setlogin({ ...login, logged: false });
+        setLogin({ ...login, logged: false });
       }
     };
     userLogged();
@@ -39,7 +39,9 @@ function Login() {
   return (
     <PageS>
       <Header />
-      <FormLogin />
+      <MainS>
+        <FormLogin />
+      </MainS>
       <Footer />
     </PageS>
   );

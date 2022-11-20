@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import requests from '../services/requests';
-import { FormLoginS } from '../styles';
+import { FormS } from '../styles';
 
 function FormLogin() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function FormLogin() {
     });
   }
 
-  async function sendLogin() {
+  async function sendLogin(): Promise<void> {
     const response = await requests.login(login);
     if ('user' in response) {
       localStorage.setItem('cyber-wallet-ng', JSON.stringify(response));
@@ -30,14 +30,29 @@ function FormLogin() {
     }
   }
 
+  async function createAccount(): Promise<void> {
+    const response = await requests.createUser(login);
+    if ('error' in response) {
+      if (response.error === 'Invalid Username') {
+        window.alert('Nome de Usuario Invalido');
+      } else if (response.error === 'Invalid Password') {
+        window.alert('Senha Invalida');
+      }
+    } else {
+      localStorage.setItem('cyber-wallet-ng', JSON.stringify(response));
+      window.alert('Bem Vindo!');
+      navigate('/wallet');
+    }
+  }
+
   return (
-    <FormLoginS>
+    <FormS>
       <label htmlFor="username">
         <input
           name="username"
           type="text"
           value={login.username}
-          placeholder="Email"
+          placeholder="Nome de Usuario"
           onChange={(event) => handleLogin(event)}
         />
       </label>
@@ -46,14 +61,17 @@ function FormLogin() {
           name="password"
           type="password"
           value={login.password}
-          placeholder="Password"
+          placeholder="Senha"
           onChange={(event) => handleLogin(event)}
         />
       </label>
       <button type="button" onClick={sendLogin}>
         Login
       </button>
-    </FormLoginS>
+      <button type="button" onClick={createAccount}>
+        Cadastrar
+      </button>
+    </FormS>
   );
 }
 

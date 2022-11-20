@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 
 import { AppContextInterface } from '../interfaces';
+import { Login } from '../types';
 import cyberWalletContext from './AppContext';
 
 function CyberWalletProvider({ children }: PropsWithChildren<AppContextInterface>) {
@@ -9,10 +10,11 @@ function CyberWalletProvider({ children }: PropsWithChildren<AppContextInterface
     id: 0,
     username: '',
   });
+
   const contextValue = useMemo(
     () => ({
       login,
-      setLogin,
+      setLogin: (data: Login) => setLogin(data),
     }),
     [login],
   );

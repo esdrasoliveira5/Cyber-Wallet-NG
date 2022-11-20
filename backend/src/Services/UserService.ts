@@ -6,8 +6,9 @@ import UserModel from '../Models/UserModel';
 import { 
   ResponseError, 
   UserPayload, 
-  UserToken, User, 
+  User, 
   TokenType,
+  Token,
 } from '../Types/Index';
 
 import Service from './Index';
@@ -23,7 +24,7 @@ class UserService extends Service<User, UserPayload> {
     this.userModel = model;    
   }
 
-  create = async (data: UserPayload): Promise<User | ResponseError> => {
+  create = async (data: UserPayload): Promise<Token<User> | ResponseError> => {
     const validation = this.dataValidation(data);
     if (validation) return validation;
     const user = await this.model.getOne(data.username);
@@ -31,7 +32,11 @@ class UserService extends Service<User, UserPayload> {
 
     const hash = await this.hashIt(data.password);
     const response = await this.model.create({ ...data, password: hash });
-    return response;
+    const token = await this.generateToken(
+      { id: response.id, username: response.username as string },
+    );
+    delete response.password;
+    return { ...response, token };
   };
 
   getOne = async (data: string):
@@ -47,7 +52,7 @@ class UserService extends Service<User, UserPayload> {
     return users;
   };
 
-  login = async (data: UserPayload): Promise<UserToken | ResponseError> => {
+  login = async (data: UserPayload): Promise<Token<User> | ResponseError> => {
     const validation = this.dataValidation(data);
     if (validation) return validation;
 
@@ -64,7 +69,7 @@ class UserService extends Service<User, UserPayload> {
       { id: user.id, username: user.username as string },
     );
     delete user.password;
-    return { user, token };
+    return { ...user, token };
   };
 
   getAccount = async (data: string): 

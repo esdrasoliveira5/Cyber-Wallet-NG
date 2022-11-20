@@ -30,11 +30,9 @@ const USER_PAYLOAD = {
 };
 
 const LOGIN_PAYLOAD = {
-  user: {
-      id: 1,
-      username: "esdrasteste1",
-      accountId: 1
-  },
+  id: 1,
+  username: "esdrasteste1",
+  accountId: 1,
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlc2RyYXN0ZXN0ZTEiLCJpYXQiOjE2Njg3MTM1NzEsImV4cCI6MTcxMTkxMzU3MX0.w9A5E_iFLPMxcW5KoCEQsrW0XdY4OI1i3PLIZ3mAhSY"
 };
 
@@ -73,10 +71,11 @@ describe('1 - Test endpoint POST /user', () => {
       });
 
       expect(chaiHttpResponse).to.have.status(201);
-      expect(chaiHttpResponse.body).to.deep.equal({
+      expect(chaiHttpResponse.body).to.have.deep.keys({
         id: 1,
         username: "esdrasteste1",
-        accountId: 1
+        accountId: 1,
+        token: 'token'
       });
     });
   });
@@ -178,10 +177,11 @@ describe('2 - Test endpoint POST /login', () => {
       });
 
       expect(chaiHttpResponse).to.have.status(200);
-      expect(chaiHttpResponse.body.user).to.deep.equal({
+      expect(chaiHttpResponse.body).to.have.deep.keys({
         "id": 1,
         "username": "esdrasteste1",
-        "accountId": 1
+        "accountId": 1,
+        "token": 'string'
       });
     });
   });
