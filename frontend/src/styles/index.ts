@@ -105,3 +105,89 @@ export const MainS = styled.main`
     max-width: 500px;
   }
 `;
+
+export const ProfileS = styled.div`
+  color: #f5f3f4;
+  border-radius: 10px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 95%;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  backdrop-filter: blur(8px);
+`;
+
+export const SidebarS = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(31, 30, 30, 0.192);
+  backdrop-filter: blur(8px);
+  width: 25%;
+  max-width: 200px;
+  border-radius: 10px;
+  button {
+    align-self: baseline;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+  button:hover {
+    color: #660708;
+    transform: scale(1.1);
+  }
+  a {
+    align-self: baseline;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+  a:hover {
+    color: #660708;
+  }
+`;
+
+export const ProfileInfoS = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  img {
+    padding: 10px;
+    width: 100%;
+    max-width: 200px;
+  }
+  margin-bottom: 20px;
+`;
+
+export const NavCategoriesS = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 200px;
+  button {
+    transition: transform 0.2s;
+  }
+  button:hover {
+    color: #660708;
+    transform: scale(1.2);
+  }
+`;
+
+export const ContentS = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;

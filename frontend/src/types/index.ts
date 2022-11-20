@@ -38,21 +38,44 @@ export type Transaction = {
   id: number;
   value: number;
   createdAt: string;
-  debitedAccountId: number;
-  creditedAccountId: number;
-};
-
-export type LoginState = {
-  login: {
-    logged: boolean;
+  debitedAccount: {
     id: number;
-    username: string;
+    user: {
+      id: number;
+      username: string;
+    };
   };
-  setLogin: (data: Login) => void;
+  creditedAccount: {
+    id: number;
+    user: {
+      id: number;
+      username: string;
+    };
+  };
 };
 
 export type Login = {
   logged: boolean;
   id: number;
   username: string;
+};
+
+export type LoginState = {
+  login: Login;
+  setLogin: (data: Login) => void;
+};
+
+export type Account = {
+  id: number;
+  balance: number;
+};
+
+export type AccountState = {
+  account: Account;
+  setAccount: (data: Account) => void;
+};
+
+export type TransactionsState = {
+  transactions: Transaction[];
+  setTransactions: (data: Transaction[]) => void;
 };

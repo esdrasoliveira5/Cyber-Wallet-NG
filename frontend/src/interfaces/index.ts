@@ -1,10 +1,10 @@
-import { Login } from '../types';
+import { Account, Login, Transaction } from '../types';
 
 export interface AppContextInterface {
-  login: {
-    logged: boolean;
-    id: number;
-    username: string;
-  };
+  login?: Login;
   setLogin?: (data: Login) => void;
+  account?: Account;
+  setAccount?: (data: Account) => void;
+  transactions?: Transaction[];
+  setTransactions?: (data: Transaction[]) => void;
 }

@@ -3,6 +3,7 @@ import {
   Transaction,
   TransactionPayload,
   User,
+  UserAccount,
   UserLogin,
   UserPayload,
 } from '../types';
@@ -44,7 +45,10 @@ async function createUser(data: UserPayload): Promise<User | ResponseError> {
   }
 }
 
-async function getUser(user: string, token: string): Promise<User | ResponseError> {
+async function getUser(
+  user: string,
+  token: string,
+): Promise<User | UserAccount | ResponseError> {
   try {
     const response: Response = await fetch(`${URL_FETCH}/user/${user}`, {
       method: 'GET',
@@ -119,10 +123,7 @@ async function getTransaction(
   }
 }
 
-async function getAllTransactions(
-  transaction: string,
-  token: string,
-): Promise<Transaction[] | ResponseError> {
+async function getAllTransactions(token: string): Promise<Transaction[] | ResponseError> {
   try {
     const response: Response = await fetch(`${URL_FETCH}/transaction`, {
       method: 'GET',

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 
 import { AppContextInterface } from '../interfaces';
-import { Login } from '../types';
+import { Account, Login, Transaction } from '../types';
 import cyberWalletContext from './AppContext';
 
 function CyberWalletProvider({ children }: PropsWithChildren<AppContextInterface>) {
@@ -11,12 +11,23 @@ function CyberWalletProvider({ children }: PropsWithChildren<AppContextInterface
     username: '',
   });
 
+  const [account, setAccount] = useState({
+    id: 0,
+    balance: 0,
+  });
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
   const contextValue = useMemo(
     () => ({
       login,
       setLogin: (data: Login) => setLogin(data),
+      account,
+      setAccount: (data: Account) => setAccount(data),
+      transactions,
+      setTransactions: (data: Transaction[]) => setTransactions(data),
     }),
-    [login],
+    [login, account],
   );
 
   return (
