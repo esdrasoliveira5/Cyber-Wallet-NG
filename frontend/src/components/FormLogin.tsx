@@ -21,7 +21,7 @@ function FormLogin() {
 
   async function sendLogin(): Promise<void> {
     const response = await requests.login(login);
-    if ('user' in response) {
+    if ('token' in response) {
       localStorage.setItem('cyber-wallet-ng', JSON.stringify(response));
       window.alert('Bem Vindo!');
       navigate('/wallet');

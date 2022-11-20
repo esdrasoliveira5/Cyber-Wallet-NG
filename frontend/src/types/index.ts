@@ -19,7 +19,9 @@ export type UserAccount = {
 };
 
 export type UserLogin = {
-  user: UserAccount;
+  id: number;
+  username: string;
+  accountId: number;
   token: string;
 };
 
