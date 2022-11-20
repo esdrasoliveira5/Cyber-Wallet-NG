@@ -6,7 +6,7 @@ import FormLogin from '../components/FormLogin';
 import Header from '../components/Header';
 import cyberWalletContext from '../context/AppContext';
 import requests from '../services/requests';
-import { MainS, PageS } from '../styles';
+import { MainForFormS, PageS } from '../styles';
 import { LoginState, UserLogin } from '../types';
 
 function Login() {
@@ -39,9 +39,9 @@ function Login() {
   return (
     <PageS>
       <Header />
-      <MainS>
+      <MainForFormS>
         <FormLogin />
-      </MainS>
+      </MainForFormS>
       <Footer />
     </PageS>
   );

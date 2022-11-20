@@ -30,7 +30,7 @@ function Table() {
   };
 
   if (transactions.length === 0) {
-    return <h1>Voce nao tem pedidos</h1>;
+    return <h1>Voce não tem transações</h1>;
   }
   return (
     <TableS>

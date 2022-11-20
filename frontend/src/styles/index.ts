@@ -74,7 +74,6 @@ export const FooterS = styled.footer`
 `;
 
 export const HeaderS = styled.header`
-  font-size: 15px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -86,8 +85,35 @@ export const HeaderS = styled.header`
   background-color: rgb(47, 193, 140, 0.8);
   color: #f5f3f4;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  img {
-    width: 200px;
+  div {
+    display: flex;
+    align-items: center;
+    p {
+      font-size: 30px;
+    }
+    span {
+      font-size: 20px;
+    }
+    img {
+      width: 50px;
+    }
+    button {
+      text-transform: uppercase;
+      outline: 0;
+      background-color: #e5383b;
+      border: 0;
+      border-radius: 5px;
+      padding: 5px;
+      color: #ffffff;
+      font-size: 10px;
+      -webkit-transition: all 0.3 ease;
+      transition: all 0.3 ease;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0b090a;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -98,6 +124,20 @@ export const MainS = styled.main`
   backdrop-filter: blur(8px);
   border-radius: 10px;
   max-width: 1000px;
+  width: 100%;
+  padding: 45px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+export const MainForFormS = styled.main`
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  max-width: 350px;
   width: 100%;
   padding: 45px;
   text-align: center;
@@ -178,7 +218,6 @@ export const TableS = styled.div`
   padding-left: 50px;
   display: flex;
   flex-direction: row;
-  height: 100%;
   width: 100%;
   font-size: 15px;
   text-align: center;
