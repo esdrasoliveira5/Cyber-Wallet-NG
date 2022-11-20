@@ -5,35 +5,19 @@ import cyberWalletContext from '../context/AppContext';
 import requests from '../services/requests';
 import { ContentS, NavCategoriesS, ProfileInfoS, ProfileS, SidebarS } from '../styles';
 import { AccountState, LoginState, Transaction, UserLogin } from '../types';
+import Table from './Table';
 
 function Profile() {
   const { login } = useContext(cyberWalletContext) as LoginState;
   const { account } = useContext(cyberWalletContext) as AccountState;
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    const getTransactions = async () => {
-      const localResponse = localStorage.getItem('cyber-wallet-ng');
-      if (localResponse !== null) {
-        const { token }: UserLogin = JSON.parse(localResponse);
-        const transactions = (await requests.getAllTransactions(token)) as Transaction[];
-        console.log(transactions);
-        if (!('error' in transactions)) {
-          setTransactions(transactions);
-        }
-      }
-    };
-    getTransactions();
-  }, []);
-
   return (
     <ProfileS>
       <SidebarS>
         <ProfileInfoS>
           <img src={ProfilePic} alt="avatar" />
           <div>
-            <h1>{login.username}</h1>
-            <h1>{account.balance}</h1>
+            <h3>{login.username}</h3>
+            <h2>Saldo R${account.balance.toPrecision(4)}</h2>
           </div>
         </ProfileInfoS>
         <NavCategoriesS>
@@ -41,14 +25,12 @@ function Profile() {
             Histórico de Transacoes
           </button>
           <button value={1} type="button" key={1}>
-            Categoria
+            Tranferir
           </button>
         </NavCategoriesS>
       </SidebarS>
       <ContentS>
-        {transactions.map(({ value, id }) => (
-          <p key={id}>{value}</p>
-        ))}
+        <Table />
       </ContentS>
     </ProfileS>
   );

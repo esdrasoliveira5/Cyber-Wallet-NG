@@ -84,36 +84,19 @@ export const MainS = styled.main`
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   border-radius: 10px;
-  max-width: 350px;
+  max-width: 1000px;
   width: 100%;
-  margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
   overflow: hidden;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  img {
-    width: 100%;
-  }
-  @media screen and (max-width: 1100px) {
-    position: absolute;
-    width: 80%;
-  }
-  @media screen and (max-width: 600px) {
-    position: absolute;
-    width: 100%;
-    margin-top: 100px;
-    max-width: 500px;
-  }
 `;
 
 export const ProfileS = styled.div`
   color: #f5f3f4;
   border-radius: 10px;
-  margin-top: 100px;
-  margin-bottom: 100px;
-  padding: 10px;
+  padding: 20px;
   display: flex;
-  flex-direction: row;
   width: 95%;
   z-index: 1;
   background: rgba(255, 255, 255, 0.2);
@@ -130,7 +113,6 @@ export const SidebarS = styled.div`
   max-width: 200px;
   border-radius: 10px;
   button {
-    align-self: baseline;
     background: none;
     color: inherit;
     border: none;
@@ -141,27 +123,14 @@ export const SidebarS = styled.div`
   }
   button:hover {
     color: #660708;
-    transform: scale(1.1);
-  }
-  a {
-    align-self: baseline;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-  }
-  a:hover {
-    color: #660708;
+    transform: scale(1.05);
   }
 `;
 
 export const ProfileInfoS = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  margin: 10px;
   img {
     padding: 10px;
     width: 100%;
@@ -190,4 +159,41 @@ export const ContentS = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+`;
+
+export const TableS = styled.div`
+  padding-left: 50px;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  font-size: 15px;
+  text-align: center;
+  td,
+  th {
+    border: 1px solid #ddd;
+
+    @media screen and (min-width: 600px) {
+      white-space: nowrap;
+      padding: 8px;
+    }
+  }
+  th {
+    background-color: rgb(47, 193, 140, 0.8);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    color: white;
+  }
+
+  td {
+    background-color: #32a79169;
+  }
+
+  tr:nth-child(even) {
+    background-color: #267a6a69;
+  }
+  tr:hover {
+    background-color: rgb(33, 158, 188);
+  }
 `;
