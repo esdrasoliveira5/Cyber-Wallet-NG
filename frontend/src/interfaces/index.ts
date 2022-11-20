@@ -5,6 +5,4 @@ export interface AppContextInterface {
   setLogin?: (data: Login) => void;
   account?: Account;
   setAccount?: (data: Account) => void;
-  transactions?: Transaction[];
-  setTransactions?: (data: Transaction[]) => void;
 }

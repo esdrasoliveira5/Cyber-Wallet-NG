@@ -16,16 +16,12 @@ function CyberWalletProvider({ children }: PropsWithChildren<AppContextInterface
     balance: 0,
   });
 
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
   const contextValue = useMemo(
     () => ({
       login,
       setLogin: (data: Login) => setLogin(data),
       account,
       setAccount: (data: Account) => setAccount(data),
-      transactions,
-      setTransactions: (data: Transaction[]) => setTransactions(data),
     }),
     [login, account],
   );

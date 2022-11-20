@@ -1,14 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import ProfilePic from '../../resources/profile_pic.jpg';
 import cyberWalletContext from '../context/AppContext';
+import requests from '../services/requests';
 import { ContentS, NavCategoriesS, ProfileInfoS, ProfileS, SidebarS } from '../styles';
-import { AccountState, LoginState, TransactionsState } from '../types';
+import { AccountState, LoginState, Transaction, UserLogin } from '../types';
 
 function Profile() {
   const { login } = useContext(cyberWalletContext) as LoginState;
   const { account } = useContext(cyberWalletContext) as AccountState;
-  const { transactions } = useContext(cyberWalletContext) as TransactionsState;
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const getTransactions = async () => {
+      const localResponse = localStorage.getItem('cyber-wallet-ng');
+      if (localResponse !== null) {
+        const { token }: UserLogin = JSON.parse(localResponse);
+        const transactions = (await requests.getAllTransactions(token)) as Transaction[];
+        console.log(transactions);
+        if (!('error' in transactions)) {
+          setTransactions(transactions);
+        }
+      }
+    };
+    getTransactions();
+  }, []);
 
   return (
     <ProfileS>
