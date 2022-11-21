@@ -2,12 +2,17 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import cyberWalletContext from '../context/AppContext';
 import requests from '../services/requests';
-import { TableS } from '../styles';
+import { FilterFormS, TableS } from '../styles';
 import { LoginState, Transaction, UserLogin } from '../types';
 
 function Table() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { login } = useContext(cyberWalletContext) as LoginState;
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [filters, setFilters] = useState({
+    createdAt: '',
+    cashIn: true,
+    cashOut: true,
+  });
   useEffect(() => {
     const getTransactions = async () => {
       const localResponse = localStorage.getItem('cyber-wallet-ng');
@@ -22,6 +27,28 @@ function Table() {
     getTransactions();
   }, []);
 
+  const submitCategory = ({ target }: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = target;
+    setFilters({
+      ...filters,
+      [name]: value,
+    });
+  };
+
+  const sendFilters = async () => {
+    const localResponse = localStorage.getItem('cyber-wallet-ng');
+    if (localResponse !== null) {
+      const { token }: UserLogin = JSON.parse(localResponse);
+      const transactions = (await requests.getAllTransactionsByFilter(
+        token,
+        filters,
+      )) as Transaction[];
+      if (!('error' in transactions)) {
+        setTransactions(transactions);
+      }
+    }
+  };
+
   const formatValue = (data: number) => {
     return data.toLocaleString('pt-br', {
       style: 'currency',
@@ -34,6 +61,47 @@ function Table() {
   }
   return (
     <TableS>
+      <FilterFormS>
+        <div>
+          <input
+            type="date"
+            name="createdAt"
+            value={filters.createdAt}
+            onChange={submitCategory}
+          />
+        </div>
+        <div>
+          <label>
+            {'Entradas '}
+            <input
+              name="cashIn"
+              type="checkbox"
+              checked={filters.cashIn}
+              onChange={() => setFilters({ ...filters, cashIn: !filters.cashIn })}
+            />
+          </label>
+          <label>
+            {'Saidas '}
+            <input
+              name="cashOut"
+              type="checkbox"
+              checked={filters.cashOut}
+              onChange={() => setFilters({ ...filters, cashOut: !filters.cashOut })}
+            />
+          </label>
+        </div>
+        <div>
+          <button type="button" onClick={sendFilters}>
+            Enviar
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilters({ createdAt: '', cashIn: true, cashOut: true })}
+          >
+            Limpar
+          </button>
+        </div>
+      </FilterFormS>
       <table>
         <thead>
           <tr>

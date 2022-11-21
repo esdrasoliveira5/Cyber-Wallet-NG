@@ -2,6 +2,7 @@ import {
   ResponseError,
   Transaction,
   TransactionPayload,
+  TransactionsFilters,
   User,
   UserAccount,
   UserLogin,
@@ -140,6 +141,29 @@ async function getAllTransactions(token: string): Promise<Transaction[] | Respon
   }
 }
 
+async function getAllTransactionsByFilter(
+  token: string,
+  { createdAt, cashIn, cashOut }: TransactionsFilters,
+) {
+  try {
+    const response = await fetch(
+      `${URL_FETCH}/transaction?createdAt=${createdAt}&cashIn=${cashIn}&cashOut=${cashOut}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: APLICATION,
+          'Content-Type': APLICATION,
+          Authorization: token,
+        },
+      },
+    );
+    const results: Transaction[] = await response.json();
+    return results;
+  } catch (error) {
+    return { error } as ResponseError;
+  }
+}
+
 export default {
   login,
   createUser,
@@ -148,4 +172,5 @@ export default {
   createTransaction,
   getTransaction,
   getAllTransactions,
+  getAllTransactionsByFilter,
 };

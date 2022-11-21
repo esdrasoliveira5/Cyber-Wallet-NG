@@ -223,7 +223,7 @@ export const ContentS = styled.div`
 export const TableS = styled.div`
   padding-left: 50px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   font-size: 15px;
   text-align: center;
@@ -253,5 +253,65 @@ export const TableS = styled.div`
   }
   tr:hover {
     background-color: rgb(33, 158, 188);
+  }
+`;
+
+export const FilterFormS = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: baseline;
+  padding-top: 15px;
+  color: #f5f3f4;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  input {
+    outline: 0;
+    background: #f2f2f2;
+    border: 0;
+    border-radius: 5px;
+    margin: 0 0 15px;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  input:focus {
+    background: #dbdbdb;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    label {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    button {
+      text-transform: uppercase;
+      outline: 0;
+      background-color: rgb(47, 193, 140);
+      border: 0;
+      border-radius: 5px;
+      padding: 5px;
+      color: #ffffff;
+      font-size: 12px;
+      -webkit-transition: all 0.3 ease;
+      transition: all 0.3 ease;
+      cursor: pointer;
+    }
+
+    button:nth-child(even) {
+      background-color: #e5383b;
+    }
+    button:hover {
+      background-color: #660708;
+    }
   }
 `;

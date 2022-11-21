@@ -79,3 +79,9 @@ export type TransactionsState = {
   transactions: Transaction[];
   setTransactions: (data: Transaction[]) => void;
 };
+
+export type TransactionsFilters = {
+  createdAt: string;
+  cashIn: boolean;
+  cashOut: boolean;
+};
