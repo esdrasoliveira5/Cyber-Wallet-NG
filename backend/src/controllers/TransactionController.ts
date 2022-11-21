@@ -6,6 +6,7 @@ import {
   Transaction,
   TransactionDTO,
   TransactionPayload,
+  TransactionsFilters,
 } from '../Types/Index';
 import TransactionService from '../Services/TransactionService';
 
@@ -75,8 +76,14 @@ class TransactionController
     if ('error' in userToken) {
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
     }
-    const response = await this.service.getAll(userToken.id);
+    const { createdAt, cashIn, cashOut }: TransactionsFilters = req.query;
 
+    if (createdAt !== undefined && cashIn !== undefined) {
+      const params = { createdAt, cashIn, cashOut };
+      const response = await this.service.getAll(userToken.id, params);
+      return res.status(StatusCodes.OK).json(response);
+    } 
+    const response = await this.service.getAll(userToken.id, null);
     return res.status(StatusCodes.OK).json(response);
   };
 }

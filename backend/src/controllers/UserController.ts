@@ -59,7 +59,7 @@ class UserController extends Controller<User, UserPayload > {
     if ('error' in userToken) {
       return res.status(StatusCodes.UNAUTHORIZED).json(userToken);
     }
-    const response = await this.service.getAll(null);
+    const response = await this.service.getAll(null, null);
 
     return res.status(StatusCodes.OK).json(response);
   };

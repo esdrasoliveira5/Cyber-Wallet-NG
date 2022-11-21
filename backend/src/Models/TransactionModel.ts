@@ -1,5 +1,9 @@
 import { User } from '@prisma/client';
-import { Transaction, TransactionPayload } from '../Types/Index';
+import {
+  Transaction,
+  TransactionPayload,
+  TransactionsFilters,
+} from '../Types/Index';
 import PrismaModel from './PrismaModel';
 
 class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
@@ -54,6 +58,38 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
         },
       },
     });
+
+  // eslint-disable-next-line max-lines-per-function
+  getFilter = async (data: number, query: TransactionsFilters): 
+  Promise<Transaction[]> => {
+    const start = new Date(query.createdAt as string);
+    const end = new Date(start.getTime());
+    end.setDate(end.getDate() + 1);
+    
+    return this.model.transaction.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+        OR: [
+          { creditedAccountId: query.cashIn === 'true' ? data : undefined },
+          { debitedAccountId: query.cashOut === 'true' ? data : undefined },
+        ],
+      },
+      select: { id: true,
+        value: true,
+        createdAt: true,
+        debitedAccount: {
+          select: { id: true, user: { select: { id: true, username: true } } },
+        },
+        creditedAccount: {
+          select: { id: true, user: { select: { id: true, username: true } } },
+        },
+      },
+    });
+  };
 
   getAccount = async (data: string): Promise<User | null> => 
     this.model.user.findUnique({

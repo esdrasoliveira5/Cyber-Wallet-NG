@@ -1,4 +1,4 @@
-import { ResponseError } from '../Types/Index';
+import { ResponseError, TransactionsFilters } from '../Types/Index';
 
 export interface ServiceI<T, M> {
 
@@ -6,6 +6,9 @@ export interface ServiceI<T, M> {
   
   getOne(data: string | number): Promise<T | ResponseError>;
 
-  getAll(data: number | null): Promise<T[]>;
+  getAll(
+    data: number | null, 
+    query: null | TransactionsFilters
+  ): Promise<T[]>
 
 }

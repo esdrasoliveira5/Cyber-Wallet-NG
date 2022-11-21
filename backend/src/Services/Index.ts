@@ -1,4 +1,9 @@
-import { ResponseError, Token, TransactionDTO } from '../Types/Index';
+import {
+  ResponseError,
+  Token,
+  TransactionDTO,
+  TransactionsFilters,
+} from '../Types/Index';
 import { Model } from '../Interfaces/ModelInterface';
 import { ServiceI } from '../Interfaces/ServiceInterface';
 
@@ -10,7 +15,9 @@ abstract class Service<T, M> implements ServiceI<T, M> {
 
   abstract getOne(data: string | number): Promise<T | ResponseError>;
 
-  abstract getAll(data: number | null): Promise<T[]>;
+  abstract getAll(
+    data: number | null,
+    query: null | TransactionsFilters): Promise<T[]>;
 }
 
 export default Service;

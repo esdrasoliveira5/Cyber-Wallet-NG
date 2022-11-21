@@ -5,6 +5,7 @@ import {
   Transaction, 
   TransactionDTO, 
   TransactionPayload, 
+  TransactionsFilters, 
   User,
 } from '../Types/Index';
 
@@ -51,7 +52,13 @@ class TransactionService extends Service<Transaction, TransactionPayload> {
     return transaction;
   };
 
-  getAll = async (data: number): Promise<Transaction[]> => {
+  getAll = async (data: number, query: TransactionsFilters):
+  Promise<Transaction[]> => {
+    if (query !== null) {
+      const transactions = await this.transactionModel.getFilter(data, query);
+      return transactions;
+    }
+
     const transactions = await this.model.getAll(data);
     return transactions;
   };

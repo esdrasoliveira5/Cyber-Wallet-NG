@@ -48,6 +48,21 @@ export type TransactionDTO = {
   creditedUsername: string,
 };
 
+export type TransactionsFilters = {
+  createdAt?: string;
+  cashIn?: string;
+  cashOut?: string;
+};
+export type TransactionWhere = {
+  createdAt: string;
+  creditedAccountId?: number;
+  debitedAccountId?: number;
+  OR?: [
+    { creditedAccountId: number },
+    { debitedAccountId: number },
+  ];
+};
+
 export interface RequestWithBody<T> extends Request {
   body: T;
 }
