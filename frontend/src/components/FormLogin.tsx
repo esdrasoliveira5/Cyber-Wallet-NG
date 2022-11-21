@@ -36,7 +36,9 @@ function FormLogin() {
       if (response.error === 'Invalid Username') {
         window.alert('Nome de Usuario Invalido');
       } else if (response.error === 'Invalid Password') {
-        window.alert('Senha Invalida');
+        window.alert(`Senha Invalida!
+        A Senha precisa ser composta por pelo menos 8 caracteres, um número e uma letra maiúscula. 
+        Ex: Cyb3rWallet`);
       }
     } else {
       localStorage.setItem('cyber-wallet-ng', JSON.stringify(response));
