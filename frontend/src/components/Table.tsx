@@ -148,7 +148,7 @@ function Table() {
                       : `+ ${formatValue(value)}`}
                   </td>
                   <td>{login.id == debitedId ? credited : debited}</td>
-                  <td>{new Date(createdAt).toLocaleString()}</td>
+                  <td>{new Date(createdAt).toLocaleString('pt-br')}</td>
                 </tr>
               ),
             )}
