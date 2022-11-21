@@ -1,6 +1,9 @@
 import express, { Router, Request, Response } from 'express';
 import Cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import HandleError from './middlewares/HandleError';
+
+import swaggerDocument from './swagger.json';
 
 require('express-async-errors');
 
@@ -18,6 +21,11 @@ class App {
         message: 'API ONLINE!!',
       });
     });
+    this.app.use(
+      '/api-docs', 
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument),
+    );
   }
 
   public startServer(PORT: string | number = 3001): void {

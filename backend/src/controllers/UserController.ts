@@ -72,7 +72,7 @@ class UserController extends Controller<User, UserPayload > {
     
     const response = await this.userService.login(body);
     if ('error' in response) {
-      return res.status(StatusCodes.BAD_REQUEST).json(response);
+      return res.status(StatusCodes.UNAUTHORIZED).json(response);
     }
 
     return res.status(StatusCodes.OK).json(response);
