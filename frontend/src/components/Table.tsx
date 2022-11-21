@@ -49,6 +49,22 @@ function Table() {
     }
   };
 
+  const clearFilters = async () => {
+    const cleanParams = { createdAt: '', cashIn: true, cashOut: true };
+    const localResponse = localStorage.getItem('cyber-wallet-ng');
+    if (localResponse !== null) {
+      const { token }: UserLogin = JSON.parse(localResponse);
+      const transactions = (await requests.getAllTransactionsByFilter(
+        token,
+        cleanParams,
+      )) as Transaction[];
+      if (!('error' in transactions)) {
+        setTransactions(transactions);
+      }
+    }
+    setFilters(cleanParams);
+  };
+
   const formatValue = (data: number) => {
     return data.toLocaleString('pt-br', {
       style: 'currency',
@@ -56,9 +72,6 @@ function Table() {
     });
   };
 
-  if (transactions.length === 0) {
-    return <h1>Voce não tem transações</h1>;
-  }
   return (
     <TableS>
       <FilterFormS>
@@ -94,53 +107,54 @@ function Table() {
           <button type="button" onClick={sendFilters}>
             Enviar
           </button>
-          <button
-            type="button"
-            onClick={() => setFilters({ createdAt: '', cashIn: true, cashOut: true })}
-          >
+          <button type="button" onClick={clearFilters}>
             Limpar
           </button>
         </div>
       </FilterFormS>
-      <table>
-        <thead>
-          <tr>
-            <th>Transação</th>
-            <th>Valor</th>
-            <th>Nome do usuário</th>
-            <th>Data da transação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map(
-            (
-              {
-                id,
-                createdAt,
-                value,
-                debitedAccount: {
-                  user: { id: debitedId, username: debited },
+      {transactions.length === 0 ? (
+        <h1>Voce não tem transações</h1>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Transação</th>
+              <th>Valor</th>
+              <th>Nome do usuário</th>
+              <th>Data da transação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map(
+              (
+                {
+                  id,
+                  createdAt,
+                  value,
+                  debitedAccount: {
+                    user: { id: debitedId, username: debited },
+                  },
+                  creditedAccount: {
+                    user: { username: credited },
+                  },
                 },
-                creditedAccount: {
-                  user: { username: credited },
-                },
-              },
-              i,
-            ) => (
-              <tr key={id}>
-                <td>{transactions.length - i}</td>
-                <td>
-                  {login.id == debitedId
-                    ? `- ${formatValue(value)}`
-                    : `+ ${formatValue(value)}`}
-                </td>
-                <td>{login.id == debitedId ? credited : debited}</td>
-                <td>{new Date(createdAt).toLocaleString()}</td>
-              </tr>
-            ),
-          )}
-        </tbody>
-      </table>
+                i,
+              ) => (
+                <tr key={id}>
+                  <td>{transactions.length - i}</td>
+                  <td>
+                    {login.id == debitedId
+                      ? `- ${formatValue(value)}`
+                      : `+ ${formatValue(value)}`}
+                  </td>
+                  <td>{login.id == debitedId ? credited : debited}</td>
+                  <td>{new Date(createdAt).toLocaleString()}</td>
+                </tr>
+              ),
+            )}
+          </tbody>
+        </table>
+      )}
     </TableS>
   );
 }

@@ -34,6 +34,24 @@ const TRANSACTION_PAYLOAD = {
     creditedAccountId: 2
 }
 
+const TRANSACTIONS_PAYLOAD = [
+  {
+    id: 1,
+    value: 50,
+    createdAt: new Date("2022-11-17T18:23:24.116Z"),
+    debitedAccountId: 1,
+    creditedAccountId: 2
+  },
+  {
+    id: 2,
+    value: 40,
+    createdAt: new Date("2022-11-17T18:23:24.116Z"),
+    debitedAccountId: 1,
+    creditedAccountId: 3
+  }
+]
+
+
 const ACCOUNT_PAYLOAD = {
   id: 2,
   username: 'esdrasteste2',
@@ -188,7 +206,7 @@ describe('1 - Test endpoint POST /transaction', () => {
   });
 });
 
-describe('2 - Test endpoint POST /transaction', () => {
+describe('2 - Test endpoint GET /transaction/:id', () => {
   describe('2.1 - if success', () => {
     let chaiHttpResponse: Response;
     before(() => {
@@ -258,6 +276,111 @@ describe('2 - Test endpoint POST /transaction', () => {
       chaiHttpResponse = await chai
          .request(server.app)
          .get('/transaction/1')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(500);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Internal Server Error"});
+    });
+  });
+});
+
+describe('3 - Test endpoint GET /transaction', () => {
+  describe('3.1 - if success', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(transactionModel, 'getAll')
+      .resolves(TRANSACTIONS_PAYLOAD);
+      sinon
+      .stub(transactionModel, 'getFilter')
+      .resolves([
+        {
+          id: 1,
+          value: 50,
+          createdAt: new Date("2022-11-17T18:23:24.116Z"),
+          debitedAccountId: 1,
+          creditedAccountId: 2
+        }
+      ]);
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 200 and all the transactions', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.deep.equal([
+        {
+          id: 1,
+          value: 50,
+          createdAt:"2022-11-17T18:23:24.116Z",
+          debitedAccountId: 1,
+          creditedAccountId: 2
+        },
+        {
+          id: 2,
+          value: 40,
+          createdAt: "2022-11-17T18:23:24.116Z",
+          debitedAccountId: 1,
+          creditedAccountId: 3
+        }
+      ]);
+    });
+
+    it('b) return status 200 and all the transactions filtered', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction?createdAt=2022-11-17&cashIn=true&cashOut=true')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', TOKEN)
+
+      expect(chaiHttpResponse).to.have.status(200);
+      expect(chaiHttpResponse.body).to.deep.equal([
+        {
+          id: 1,
+          value: 50,
+          createdAt: "2022-11-17T18:23:24.116Z",
+          debitedAccountId: 1,
+          creditedAccountId: 2
+        },
+      ]);
+    });
+  });
+
+  
+  describe('3.2 - if fail', () => {
+    let chaiHttpResponse: Response;
+    before(() => {
+      sinon
+      .stub(transactionModel, 'getAll')
+      .rejects({ error: 'Internal Server Error'});
+    });
+    after(()=>{
+      sinon.restore();
+    });
+
+    it('a) return status 401 and the error message "Unauthorized" if Authorization token is invalid', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction')
+         .set('X-API-Key', 'foobar')
+         .set('authorization', '')
+
+      expect(chaiHttpResponse).to.have.status(401);
+      expect(chaiHttpResponse.body).to.deep.equal({ "error": "Unauthorized"});
+    });
+
+    it('c) return status 500 and the error message "Internal Server Error"', async () => {
+      chaiHttpResponse = await chai
+         .request(server.app)
+         .get('/transaction')
          .set('X-API-Key', 'foobar')
          .set('authorization', TOKEN)
 

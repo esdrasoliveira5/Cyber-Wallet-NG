@@ -59,25 +59,11 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
       },
     });
 
-  // eslint-disable-next-line max-lines-per-function
   getFilter = async (data: number, query: TransactionsFilters): 
-  Promise<Transaction[]> => {
-    const start = new Date(query.createdAt as string);
-    const end = new Date(start.getTime());
-    end.setDate(end.getDate() + 1);
-    
-    return this.model.transaction.findMany({
+  Promise<Transaction[]> => 
+    this.model.transaction.findMany({
       orderBy: { createdAt: 'desc' },
-      where: {
-        createdAt: {
-          gte: start,
-          lte: end,
-        },
-        OR: [
-          { creditedAccountId: query.cashIn === 'true' ? data : undefined },
-          { debitedAccountId: query.cashOut === 'true' ? data : undefined },
-        ],
-      },
+      where: this.transactionsFilters(data, query),
       select: { id: true,
         value: true,
         createdAt: true,
@@ -89,7 +75,6 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
         },
       },
     });
-  };
 
   getAccount = async (data: string): Promise<User | null> => 
     this.model.user.findUnique({
@@ -128,6 +113,25 @@ class TransactionModel extends PrismaModel<Transaction, TransactionPayload> {
     });
 
     return true;
+  };
+
+  private transactionsFilters = (data: number, query: TransactionsFilters) => {
+    const params = {
+      OR: [
+        { creditedAccountId: query.cashIn === 'true' ? data : undefined },
+        { debitedAccountId: query.cashOut === 'true' ? data : undefined },
+      ],
+    };
+    if (query.createdAt !== '') {
+      const start = new Date(query.createdAt as string);
+      const end = new Date(start.getTime());
+      end.setDate(end.getDate() + 1);
+      return {
+        ...params,
+        createdAt: { gte: start, lte: end },
+      };
+    } 
+    return params;
   };
 }
 
